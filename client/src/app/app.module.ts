@@ -10,6 +10,8 @@ import { JapaneseNativeRecallComponent } from './components/japanese-native-reca
 import { NativeJapaneseWritingComponent } from './components/native-japanese-writing/native-japanese-writing.component';
 import { ManageCardComponent } from './components/manage-card/manage-card.component';
 import { SettingsComponent } from './components/settings/settings.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { SettingsComponent } from './components/settings/settings.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
