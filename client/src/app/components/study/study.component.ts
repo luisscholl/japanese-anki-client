@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CardService } from './../../services/card.service';
+import { Card } from 'src/app/models/card.model';
 
 @Component({
   selector: 'lj-study',
@@ -7,11 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StudyComponent implements OnInit {
 
-  cardType: string;
+  card: Card;
 
-  constructor() { }
+  constructor(
+    private cardService: CardService
+  ) { }
 
   ngOnInit(): void {
+    this.card = this.cardService.first();
+  }
+
+  next(succeeded: boolean) {
+    this.card = this.cardService.next(succeeded);
   }
 
 }

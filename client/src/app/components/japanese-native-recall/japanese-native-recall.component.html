@@ -1,1 +1,10 @@
-<p>japanese-native-recall works!</p>
+<div class="card japanese-native-recall">
+  <h1>{{card.japanese}}</h1>
+  <button *ngIf="!(pronunciationVisible || allVisible)" (click)="showPronunciation()">Show pronunciation</button>
+  <h2 *ngIf="pronunciationVisible || allVisible">{{card.japanesePronunciation}}</h2>
+  <div class="controls">
+    <button class="fail" (click)="fail()"><fa-icon [icon]="faTimes"></fa-icon></button>
+    <button *ngIf="!allVisible" class="check" (click)="check()"><fa-icon [icon]="faArrowRight"></fa-icon></button>
+    <button *ngIf="allVisible" class="succeed" (click)="succeed()"><fa-icon [icon]="faCheck"></fa-icon></button>
+  </div>
+</div>

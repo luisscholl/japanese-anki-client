@@ -12,6 +12,7 @@ import { ManageCardComponent } from './components/manage-card/manage-card.compon
 import { SettingsComponent } from './components/settings/settings.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { environment } from '../environments/environment';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
