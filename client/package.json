@@ -4,10 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && npm run generateAttributions",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2ea",
+    "generateAttributions": "npx oss-attribution-generator && mv oss-attribution/license.txt ../licenses/npm-licenses.txt && rm -r oss-attribution"
   },
   "private": true,
   "dependencies": {

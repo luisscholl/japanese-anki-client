@@ -1,0 +1,3 @@
+[submodule "animCJK"]
+	path = animCJK
+	url = https://github.com/parsimonhi/animCJK.git

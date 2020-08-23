@@ -4,6 +4,4 @@ My client for learning Japanese with Anki
 
 ## Licenses
 
-Currently unlicensed as I still need to choose a license.
-
-I plan to use [animCJK](https://github.com/parsimonhi/animCJK), so the license must be compatible.
+This project is built upon various open source project, which include copyleft licenses. See https://github.com/luisscholl/japanese-anki-client/blob/master/linceses/COPYING.txt for more details about licenses concerning this project.
