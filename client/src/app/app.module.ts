@@ -13,6 +13,7 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CreditsComponent } from './components/credits/credits.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     JapaneseNativeRecallComponent,
     NativeJapaneseWritingComponent,
     ManageCardComponent,
-    SettingsComponent
+    SettingsComponent,
+    CreditsComponent
   ],
   imports: [
     BrowserModule,
