@@ -7,7 +7,7 @@ import { Card } from '../models/card.model';
 // This service currently uses mock data in order to enable targeted development on components
 export class CardService {
 
-  counter: number = 0;
+  counter: number = 1;
   cards: Card[] = [
     {
       "type": "japanese-native-recall",
@@ -34,7 +34,7 @@ export class CardService {
 
   // Returns a card
   first(): Card {
-    return this.cards[0];
+    return this.cards[this.counter];
   }
 
   // Scores current card and returns next card
