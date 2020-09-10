@@ -1,0 +1,6 @@
+.character {
+  svg.acjk path[clip-path] {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+}

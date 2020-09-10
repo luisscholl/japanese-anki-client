@@ -5,10 +5,12 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build && npm run generateAttributions",
+    "install": "npm run getJaSVGs",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2ea",
-    "generateAttributions": "npx oss-attribution-generator && mv oss-attribution/license.txt ../licenses/npm-licenses.txt && rm -r oss-attribution"
+    "generateAttributions": "npx oss-attribution-generator && mv oss-attribution/license.txt ../licenses/npm-licenses.txt && rm -r oss-attribution",
+    "getJaSVGs": "npx copyfiles -f \"../animCJK/svgsJa/*\" src/assets/jaSVGs && npx copyfiles -f \"../animCJK/svgsJaSpecial/*\" src/assets/jaSVGs && npx copyfiles -f \"../animCJK/svgsKana/*\" src/assets/jaSVGs"
   },
   "private": true,
   "dependencies": {

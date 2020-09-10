@@ -33,7 +33,6 @@ export class NativeJapaneseWritingComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.canvas.nativeElement.height = this.canvasWrapper.nativeElement.clientHeight * 1.5;
-    this.canvas.nativeElement.style.marginBottom = '-' + this.canvas.nativeElement.height + 'px';
     this.canvas.nativeElement.width = this.canvasWrapper.nativeElement.clientWidth;
     this.context = this.canvas.nativeElement.getContext('2d');
   }
@@ -102,7 +101,6 @@ export class NativeJapaneseWritingComponent implements OnInit, AfterViewInit {
           this.context.getImageData(0, 0, this.canvas.nativeElement.clientWidth, this.canvas.nativeElement.clientHeight);
         this.canvas.nativeElement.height = 
           this.canvas.nativeElement.clientHeight + 0.5 * this.canvasWrapper.nativeElement.clientHeight;
-        this.canvas.nativeElement.style.marginBottom = '-' + this.canvas.nativeElement.height + 'px';
         this.context.putImageData(imageData, 0, 0);
     }
   }

@@ -14,6 +14,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CreditsComponent } from './components/credits/credits.component';
+import { CharacterComponent } from './components/character/character.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -25,10 +27,12 @@ import { CreditsComponent } from './components/credits/credits.component';
     NativeJapaneseWritingComponent,
     ManageCardComponent,
     SettingsComponent,
-    CreditsComponent
+    CreditsComponent,
+    CharacterComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     FontAwesomeModule

@@ -22,6 +22,12 @@ export class CardService {
       "native": "human",
       "score": 0
     },{
+      "type": "native-japanese-writing",
+      "japanese": "3",
+      "japanesePronunciation": "さん",
+      "native": "3",
+      "score": 0
+    },{
       "type": "japanese-native-recall",
       "japanese": "水曜日",
       "japanesePronunciation": "すいようび",

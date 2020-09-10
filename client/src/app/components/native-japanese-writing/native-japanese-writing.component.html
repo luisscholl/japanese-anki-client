@@ -1,5 +1,7 @@
 <div class="card native-japanese-writing">
-  <div class="solution">{{card.native}}</div>
+  <div class="solution">
+    <lj-character *ngFor="let character of card.japanese.split('')" [character]="character"></lj-character>
+  </div>
   <div class="canvas-wrapper" 
     #canvasWrapper
     (scroll)="onScroll($event)">
