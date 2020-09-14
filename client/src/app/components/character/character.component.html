@@ -1,2 +1,6 @@
-<div class="character" [innerHTML]="svg">
+<div ngClass="character">
+  <div #svgWrapper [ngClass]="'svg-wrapper' + (animationDone ? ' done' : '')"></div>
+  <div ngClass="controls">
+    <button *ngIf="!renderEmpty" (click)="play()"><fa-icon [icon]="faPlayCircle"></fa-icon></button>
+  </div>
 </div>

@@ -13,10 +13,16 @@ export class JapaneseNativeRecallComponent implements OnInit {
   faArrowRight = faArrowRight;
   faCheck = faCheck;
 
+  _card: Card;
   pronunciationVisible = false;
   allVisible = false;
 
-  @Input() card: Card;
+  @Input()
+  set card(val: Card) {
+    this._card = val;
+    this.allVisible = false;
+    this.pronunciationVisible = false;
+  }
 
   @Output() next: EventEmitter<boolean> = new EventEmitter();
 

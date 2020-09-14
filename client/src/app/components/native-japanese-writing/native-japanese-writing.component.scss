@@ -1,13 +1,17 @@
 .native-japanese-writing {
-  background-color: lightgreen;
 
   .canvas-wrapper {
     height: 10cm;
     overflow-y: scroll;
 
+    .solution {
+      height: 0;
+    }
+
     canvas {
       border: 1px solid black;
       width: 100%;
+      z-index: -1;
     }
   }
 }

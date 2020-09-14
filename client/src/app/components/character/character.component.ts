@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
 import { SvgService } from 'src/app/services/svg.service';
 import { SafeHtml } from '@angular/platform-browser';
+import { faPlayCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'lj-character',
@@ -10,8 +11,14 @@ import { SafeHtml } from '@angular/platform-browser';
 })
 export class CharacterComponent implements OnInit {
 
+  faPlayCircle = faPlayCircle;
+
   @Input() character: string;
-  svg: SafeHtml;
+  @Input() renderEmpty: boolean;
+  svg: string;
+  animationDone = true;
+
+  @ViewChild('svgWrapper', { static: false }) svgWrapper: ElementRef<HTMLDivElement>;
 
   constructor(
     private svgService: SvgService
@@ -19,8 +26,15 @@ export class CharacterComponent implements OnInit {
 
   ngOnInit(): void {
     this.svgService.getFromCharacter(this.character).subscribe(e => {
-      console.log(e);
       this.svg = e;
+      this.svgWrapper.nativeElement.innerHTML = this.svg as string;
     });
+  }
+
+  play(): void {
+    console.log('play');
+    this.animationDone = false;
+    this.svgWrapper.nativeElement.innerHTML = '';
+    this.svgWrapper.nativeElement.innerHTML = this.svg as string;
   }
 }

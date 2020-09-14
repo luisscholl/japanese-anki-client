@@ -1,10 +1,11 @@
 <div class="card native-japanese-writing">
-  <div class="solution">
-    <lj-character *ngFor="let character of card.japanese.split('')" [character]="character"></lj-character>
-  </div>
+  <h1>{{_card.native}}</h1>
   <div class="canvas-wrapper" 
     #canvasWrapper
     (scroll)="onScroll($event)">
+    <div class="solution">
+      <lj-character *ngFor="let character of _card.japanese.split('')" [character]="character" [renderEmpty]="!allVisible"></lj-character>
+    </div>
     <canvas #canvas 
       (mousemove)="mousemove($event)"
       (touchmove)="touchmove($event)"
@@ -13,7 +14,7 @@
     ></canvas>
   </div>
   <div class="controls">
-    <button class="fail" (click)="fail()"><fa-icon [icon]="faTimes"></fa-icon></button>
+    <button *ngIf="allVisible" class="fail" (click)="fail()"><fa-icon [icon]="faTimes"></fa-icon></button>
     <button *ngIf="!allVisible" class="check" (click)="check()"><fa-icon [icon]="faArrowRight"></fa-icon></button>
     <button *ngIf="allVisible" class="succeed" (click)="succeed()"><fa-icon [icon]="faCheck"></fa-icon></button>
   </div>

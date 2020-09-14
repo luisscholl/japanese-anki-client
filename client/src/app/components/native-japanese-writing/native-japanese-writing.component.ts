@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import { Card } from 'src/app/models/card.model';
 import { faTimes, faArrowRight, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { type } from 'os';
@@ -6,7 +6,8 @@ import { type } from 'os';
 @Component({
   selector: 'lj-native-japanese-writing',
   templateUrl: './native-japanese-writing.component.html',
-  styleUrls: ['./native-japanese-writing.component.scss']
+  styleUrls: ['./native-japanese-writing.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class NativeJapaneseWritingComponent implements OnInit, AfterViewInit {
 
@@ -14,6 +15,7 @@ export class NativeJapaneseWritingComponent implements OnInit, AfterViewInit {
   faArrowRight = faArrowRight;
   faCheck = faCheck;
 
+  _card: Card;
   allVisible = false;
   penDown = false;
   paths: any[] = [];
@@ -22,7 +24,14 @@ export class NativeJapaneseWritingComponent implements OnInit, AfterViewInit {
   @ViewChild('canvas', { static: false }) canvas: ElementRef<HTMLCanvasElement>;
   context: CanvasRenderingContext2D;
 
-  @Input() card: Card;
+  @Input()
+  set card(val: Card) {
+    this._card = val;
+    this.allVisible = false;
+    this.penDown = false;
+    this.paths = [];
+    this.context && this.context.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+  }
 
   @Output() next: EventEmitter<boolean> = new EventEmitter();
 
@@ -35,6 +44,9 @@ export class NativeJapaneseWritingComponent implements OnInit, AfterViewInit {
     this.canvas.nativeElement.height = this.canvasWrapper.nativeElement.clientHeight * 1.5;
     this.canvas.nativeElement.width = this.canvasWrapper.nativeElement.clientWidth;
     this.context = this.canvas.nativeElement.getContext('2d');
+    this.context.strokeStyle = '#658bd2';
+    // to-do: dynamic line width; good enough for now
+    this.context.lineWidth = 10;
   }
 
   fail(): void {
@@ -94,7 +106,7 @@ export class NativeJapaneseWritingComponent implements OnInit, AfterViewInit {
     this.context.closePath();
   }
 
-  onScroll(e: MouseWheelEvent) {
+  onScroll(e: WheelEvent) {
     if (this.canvasWrapper.nativeElement.scrollTop >
       this.canvas.nativeElement.clientHeight - 1.5 * this.canvasWrapper.nativeElement.clientHeight) {
         let imageData: ImageData = 
@@ -102,6 +114,9 @@ export class NativeJapaneseWritingComponent implements OnInit, AfterViewInit {
         this.canvas.nativeElement.height = 
           this.canvas.nativeElement.clientHeight + 0.5 * this.canvasWrapper.nativeElement.clientHeight;
         this.context.putImageData(imageData, 0, 0);
+        this.context.strokeStyle = '#658bd2';
+        // to-do: dynamic line width; good enough for now
+        this.context.lineWidth = 10;
     }
   }
 }

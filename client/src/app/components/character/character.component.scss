@@ -1,6 +1,23 @@
+@import '../../../styles/colors.scss';
+
 .character {
-  svg.acjk path[clip-path] {
-    animation: none !important;
-    stroke-dashoffset: 0 !important;
+  .svg-wrapper {
+    svg.acjk path[clip-path] {
+      stroke: $base01;
+    }
+
+    svg.acjk path[id] {
+      fill: $base1;
+    }
+
+    &.done {
+      svg.acjk path[clip-path] {
+        stroke-dashoffset: 0;
+      }
+    }
+  }
+
+  .controls {
+    position: relative;
   }
 }
