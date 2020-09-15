@@ -51,7 +51,7 @@ export class CardService {
 
   // Scores current card and returns next card
   next(succeeded: boolean): Card {
-    this.counter = (this.counter + 1) % 3;
+    this.counter = (this.counter + 1) % this.cards.length;
     return this.cards[this.counter];
   }
 }
