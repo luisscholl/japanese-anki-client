@@ -1,12 +1,16 @@
 <div class="card native-japanese-writing">
-  <h1>{{_card.native}}</h1>
+  <h1 *ngIf="nativeVisible">{{_card.native}}</h1>
+  <button *ngIf="nativeVisible" ngClass="hide-native" (click)="hideNative()"><fa-icon [icon]="faEyeSlash"></fa-icon></button>
+  <button *ngIf="!nativeVisible" ngClass="show-native" (click)="showNative()"><fa-icon [icon]="faEye"></fa-icon></button>
   <div class="canvas-wrapper" 
     #canvasWrapper
     (scroll)="onScroll($event)">
     <div class="solution">
-      <lj-character *ngFor="let character of _card.japanese.split('')" [character]="character" [renderEmpty]="!allVisible"></lj-character>
+      <lj-character *ngFor="let character of _card.japanese.split('').concat(whitespaceCharacters)" [character]="character" 
+      [renderEmpty]="!allVisible" (erase)="erase($event)"></lj-character>
+      <lj-character #solutionHightMeasure [character]="''" [renderEmpty]="!allVisible" (erase)="erase($event)"></lj-character>
     </div>
-    <canvas #canvas 
+    <canvas #canvas [ngClass]="allVisible ? 'back' : ''"
       (mousemove)="mousemove($event)"
       (touchmove)="touchmove($event)"
       (mouseleave)="endPath($event)"

@@ -1,17 +1,150 @@
+@import '../../../styles/colors.scss';
+
 .native-japanese-writing {
+  background-color: $base2;
+  color: $base00;
+  width: 100%;
+  height: 100vh;
+  display: flex; flex-direction: column;
+
+  h1 {
+    margin: 0;
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 3px solid $yellow;
+    background-color: $base3;
+    z-index: 1;
+  }
+
+  & > button {
+    color: $base00;
+    border: 3px solid $yellow;
+    background-color: $base3;
+    width: 1cm;
+    height: 1cm;
+    margin: auto;
+    margin-top: -0.5cm;
+    margin-bottom: -0.5cm;
+    z-index: 2;
+
+    &.show-native {
+      margin-top: 0;
+      margin-bottom: -1cm;
+
+      &:before {
+        content: '';
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        border-bottom: 3px solid $yellow;
+      }
+    }
+  }
 
   .canvas-wrapper {
-    height: 10cm;
+    height: 100%;
     overflow-y: scroll;
+    scroll-behavior: smooth;
+    padding-left: 2cm;
+    background-image: linear-gradient(to right, $base2 0, $base2 2cm, $base3 2cm, $base3 100%);
 
     .solution {
       height: 0;
+
+      .character {
+        width: 100%;
+        height: 0;
+        padding-bottom: 100%;
+
+        .svg-wrapper {
+          width: 100%;
+          height: 100%;
+          border: 3px solid $base2;
+          border-top: none;
+        }
+
+        .controls {
+          width: 2cm;
+          margin-left: -2cm;
+
+          button {
+            width: 100%;
+            border: none;
+            background-color: transparent;
+            margin-bottom: 0.15cm;
+
+            &:first-child {
+              color: $blue;
+            }
+
+            &:nth-child(2) {
+              color: $violet;
+            }
+
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+      }
+
+      &:before, &:after {
+        content: '';
+        display: block;
+        background-color: $base2;
+        width: 100%;
+        height: 0.5cm;
+      }
     }
 
     canvas {
-      border: 1px solid black;
-      width: 100%;
       z-index: -1;
+      width: 100%;
+
+      &.back {
+        opacity: 50%;
+      }
+    }
+  }
+
+  & > .controls {
+    width: 100vw;
+    height: 2cm;
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: $base3;
+
+    button {
+      width: 100%;
+      height: 100%;
+      border: none;
+      padding: 0.15cm;
+      background-color: transparent;
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      &.fail {
+        color: $red;
+        border-top: 3px solid $red;
+      }
+
+      &.check {
+        color: $yellow;
+        border-top: 3px solid $yellow;
+      }
+
+      &.succeed {
+        color: $green;
+        border-top: 3px solid $green;
+      }
     }
   }
 }

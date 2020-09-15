@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import { Card } from 'src/app/models/card.model';
-import { faTimes, faArrowRight, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faArrowRight, faCheck, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
 import { type } from 'os';
+import { CharacterComponent } from '../character/character.component';
 
 @Component({
   selector: 'lj-native-japanese-writing',
@@ -14,14 +15,19 @@ export class NativeJapaneseWritingComponent implements OnInit, AfterViewInit {
   faTimes = faTimes;
   faArrowRight = faArrowRight;
   faCheck = faCheck;
+  faEyeSlash = faEyeSlash;
+  faEye = faEye;
 
   _card: Card;
   allVisible = false;
+  nativeVisible = true;
   penDown = false;
   paths: any[] = [];
+  whitespaceCharacters: string[] = [];
 
   @ViewChild('canvasWrapper', { static: false }) canvasWrapper: ElementRef<HTMLDivElement>;
   @ViewChild('canvas', { static: false }) canvas: ElementRef<HTMLCanvasElement>;
+  @ViewChild('solutionHightMeasure', { static: false }) solutionHeightMeasure: CharacterComponent;
   context: CanvasRenderingContext2D;
 
   @Input()
@@ -42,9 +48,9 @@ export class NativeJapaneseWritingComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.canvas.nativeElement.height = this.canvasWrapper.nativeElement.clientHeight * 1.5;
-    this.canvas.nativeElement.width = this.canvasWrapper.nativeElement.clientWidth;
+    this.canvas.nativeElement.width = this.canvas.nativeElement.clientWidth;
     this.context = this.canvas.nativeElement.getContext('2d');
-    this.context.strokeStyle = '#658bd2';
+    this.context.strokeStyle = '#268bd2';
     // to-do: dynamic line width; good enough for now
     this.context.lineWidth = 10;
   }
@@ -55,6 +61,7 @@ export class NativeJapaneseWritingComponent implements OnInit, AfterViewInit {
 
   check(): void {
     this.allVisible = true;
+    this.canvasWrapper.nativeElement.scrollTo(0, 0);
   }
 
   succeed(): void {
@@ -76,6 +83,7 @@ export class NativeJapaneseWritingComponent implements OnInit, AfterViewInit {
   }
 
   touchmove(e: TouchEvent): void {
+    e.preventDefault();
     if (!this.penDown) {
       this.penDown = true;
       this.context.beginPath();
@@ -114,9 +122,32 @@ export class NativeJapaneseWritingComponent implements OnInit, AfterViewInit {
         this.canvas.nativeElement.height = 
           this.canvas.nativeElement.clientHeight + 0.5 * this.canvasWrapper.nativeElement.clientHeight;
         this.context.putImageData(imageData, 0, 0);
-        this.context.strokeStyle = '#658bd2';
+        this.context.strokeStyle = '#268bd2';
         // to-do: dynamic line width; good enough for now
         this.context.lineWidth = 10;
+        // this throws errors and causes performance issues when user scrolls down a lot,
+        // because of a lot of DOM elements. However it is no issue with normal use and in
+        // case of failure, the user can click to proceed.
+        if (this.solutionHeightMeasure.root.nativeElement.getBoundingClientRect().y < this.canvas.nativeElement.getBoundingClientRect().height + this.canvas.nativeElement.getBoundingClientRect().y) {
+          let n = (this.canvas.nativeElement.getBoundingClientRect().height + this.canvas.nativeElement.getBoundingClientRect().height - this.solutionHeightMeasure.root.nativeElement.getBoundingClientRect().height) / this.solutionHeightMeasure.root.nativeElement.getBoundingClientRect().height + 1;
+          for (let i=0; i<n; i++) this.whitespaceCharacters.push('');
+        }
     }
+  }
+
+  erase(e: HTMLDivElement) {
+    let x = e.getBoundingClientRect().x - this.canvas.nativeElement.getBoundingClientRect().x;
+    let y = e.getBoundingClientRect().y - this.canvas.nativeElement.getBoundingClientRect().y;
+    let width = e.getBoundingClientRect().width;
+    let height = e.getBoundingClientRect().height;
+    this.context.clearRect(x, y, width, height);
+  }
+
+  hideNative() {
+    this.nativeVisible = false;
+  }
+
+  showNative() {
+    this.nativeVisible = true;
   }
 }

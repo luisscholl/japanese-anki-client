@@ -17,6 +17,12 @@ export class CardService {
       "score": 0
     },{
       "type": "native-japanese-writing",
+      "japanese": "磨く",
+      "japanesePronunciation": "みがく",
+      "native": "to brush (teeth); to polish (～を)",
+      "score": 0
+    },{
+      "type": "native-japanese-writing",
       "japanese": "人間",
       "japanesePronunciation": "にんげん",
       "native": "human",

@@ -13,6 +13,7 @@ export class SvgService {
   ) { }
 
   getFromCharacter(character: string): Observable<string> {
+    if (character === '') return of(null);
     return this.http.get(`/assets/jaSVGs/${character.charCodeAt(0)}.svg`, { responseType: 'text' })
     .pipe(
       catchError(err => of(`<div class="fallback">${character}</div>`)),
