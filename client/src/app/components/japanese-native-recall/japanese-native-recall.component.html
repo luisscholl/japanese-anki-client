@@ -2,6 +2,7 @@
   <h1>{{_card.japanese}}</h1>
   <button *ngIf="!(pronunciationVisible || allVisible)" (click)="showPronunciation()">かな</button>
   <h2 *ngIf="pronunciationVisible || allVisible">{{_card.japanesePronunciation}}</h2>
+  <h2 *ngIf="allVisible">{{_card.native}}</h2>
   <div class="controls">
     <button *ngIf="allVisible" class="fail" (click)="fail()"><fa-icon [icon]="faTimes"></fa-icon></button>
     <button *ngIf="!allVisible" class="check" (click)="check()"><fa-icon [icon]="faArrowRight"></fa-icon></button>
