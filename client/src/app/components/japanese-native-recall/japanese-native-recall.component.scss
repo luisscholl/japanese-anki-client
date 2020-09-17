@@ -1,8 +1,10 @@
 @import '../../../styles/colors.scss';
 
 .japanese-native-recall {
+  position: fixed;
   background-color: $base2;
-  min-height: 100vh;
+  width: 100%;
+  height: 100%;
   color: $base02;
 
   h1, h2 {

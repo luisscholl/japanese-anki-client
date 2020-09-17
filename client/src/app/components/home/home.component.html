@@ -1,6 +1,9 @@
 <div class="home">
-  <a [routerLink]="['/credits']" i18n="License and open source license attributions">Licenses</a>
-  <a [routerLink]="['/settings']" i18n="Link to app settings">Settings</a>
-  <a [routerLink]="['/manage']" i18n="Link to manage - add, remove, modify, view - cards">Manage</a>
-  <a [routerLink]="['/study']" i18n="Start a session for studying cards">Study</a>
+  <fa-icon ngClass="sun" [icon]="faSun"></fa-icon>
+  <nav>
+    <a [routerLink]="['/credits']" i18n="License and open source license attributions">Licenses</a>
+    <a [routerLink]="['/settings']" i18n="Link to app settings">Settings</a>
+    <a [routerLink]="['/manage']" i18n="Link to manage - add, remove, modify, view - cards">Manage</a>
+    <a [routerLink]="['/study']" i18n="Start a session for studying cards">Study</a>
+  </nav>
 </div>
