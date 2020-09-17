@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Card } from 'src/app/models/card.model';
 import { faTimes, faArrowRight, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'lj-japanese-native-recall',
   templateUrl: './japanese-native-recall.component.html',
-  styleUrls: ['./japanese-native-recall.component.scss']
+  styleUrls: ['./japanese-native-recall.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class JapaneseNativeRecallComponent implements OnInit {
 

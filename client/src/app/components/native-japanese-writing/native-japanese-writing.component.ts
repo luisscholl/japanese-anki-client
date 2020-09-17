@@ -36,6 +36,7 @@ export class NativeJapaneseWritingComponent implements OnInit, AfterViewInit {
     this.allVisible = false;
     this.penDown = false;
     this.paths = [];
+    this.canvasWrapper && this.canvasWrapper.nativeElement.scroll(0, 0);
     this.context && this.context.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
   }
 

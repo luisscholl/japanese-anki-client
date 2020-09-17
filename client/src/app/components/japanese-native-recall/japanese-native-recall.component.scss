@@ -1,0 +1,65 @@
+@import '../../../styles/colors.scss';
+
+.japanese-native-recall {
+  background-color: $base2;
+  min-height: 100vh;
+  color: $base02;
+
+  h1, h2 {
+    margin: 0;
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 3px solid $yellow;
+    background-color: $base3;
+  }
+
+  & > button {
+    border: 0;
+    font-size: 2rem;
+    background-color: transparent;
+    display: block;
+    margin: auto;
+    margin-top: 1rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.5rem;
+    border: 2px solid $cyan;
+  }
+  
+  .controls {
+    width: 100vw;
+    height: 2cm;
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: $base3;
+
+    button {
+      width: 100%;
+      height: 100%;
+      border: none;
+      padding: 0.15cm;
+      background-color: transparent;
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      &.fail {
+        color: $red;
+        border-top: 3px solid $red;
+      }
+
+      &.check {
+        color: $yellow;
+        border-top: 3px solid $yellow;
+      }
+
+      &.succeed {
+        color: $green;
+        border-top: 3px solid $green;
+      }
+    }
+  }
+}

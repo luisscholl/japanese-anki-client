@@ -7,7 +7,7 @@ import { Card } from '../models/card.model';
 // This service currently uses mock data in order to enable targeted development on components
 export class CardService {
 
-  counter: number = 1;
+  counter: number = 0;
   cards: Card[] = [
     {
       "type": "japanese-native-recall",
