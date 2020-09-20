@@ -1,5 +1,6 @@
 <div class="card native-japanese-writing">
   <h1 *ngIf="nativeVisible">{{_card.native}}</h1>
+  <h2 *ngIf="nativeVisible && allVisible">{{_card.japanesePronunciation}}</h2>
   <button *ngIf="nativeVisible" ngClass="hide-native" (click)="hideNative()"><fa-icon [icon]="faEyeSlash"></fa-icon></button>
   <button *ngIf="!nativeVisible" ngClass="show-native" (click)="showNative()"><fa-icon [icon]="faEye"></fa-icon></button>
   <div class="canvas-wrapper" 
