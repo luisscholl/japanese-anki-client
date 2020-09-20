@@ -26,7 +26,6 @@ export class SettingsComponent implements OnInit {
   }
 
   select(e: FocusEvent) {
-    console.log(e);
     (e.target as HTMLInputElement).select();
   }
 }
