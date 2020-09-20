@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SettingsService } from './../../services/settings.service';
 
 @Component({
   selector: 'lj-settings',
@@ -7,9 +8,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingsComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private settingsService: SettingsService
+  ) { }
 
-  ngOnInit(): void {
+  apiBaseUrl = '';
+
+  ngOnInit(): void { 
+    this.settingsService.getApiBaseUrl().subscribe(apiBaseUrl => {
+      if (apiBaseUrl) this.apiBaseUrl = apiBaseUrl;
+    });
   }
 
+  apiBaseUrlChange(e: InputEvent) {
+    this.apiBaseUrl = (e.target as HTMLInputElement).value;
+    this.settingsService.setApiBaseUrl(this.apiBaseUrl);
+  }
+
+  select(e: FocusEvent) {
+    console.log(e);
+    (e.target as HTMLInputElement).select();
+  }
 }

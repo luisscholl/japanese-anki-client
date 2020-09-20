@@ -1,1 +1,4 @@
-<p>settings works!</p>
+<div class="settings">
+  <h3 i18n="IP address or URL of the computer or server, which runs the Anki client with AnkiConnect for synchronization across devices">AnkiConnect Address</h3>
+  <input type="text" [value]="apiBaseUrl" (input)="apiBaseUrlChange($event)" (focus)="select($event)" placeholder="IP/URL of your AnkiConnect instance" i18n-placeholder="IP address or URL of the computer or server, which runs the Anki client with AnkiConnect for synchronization across devices">
+</div>
