@@ -1,0 +1,17 @@
+@import '../../../styles/colors.scss';
+
+.credits {
+  overflow: auto;
+  background-color: $base2;
+  padding: 1rem;
+  width: 100%;
+
+  h1 {
+    margin-top: 0;
+  }
+
+  pre {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+}
