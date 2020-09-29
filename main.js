@@ -3,7 +3,7 @@ const path = require('path');
 const express = require('express');
 const compression = require('compression');
 
-const note = require('./api/note');
+const noteRouter = require('./api/note');
 
 const _port = 80;
 const _client_folder = '/client/dist/client';
@@ -13,10 +13,7 @@ api.use(compression());
 
 
 // Serve API
-api.get('/api/notes', note.list);
-api.get('/api/note/:id', note.view);
-api.post('/api/note/:id', note.update);
-api.post('/api/note/new', note.new);
+api.use('/api/note', noteRouter);
 
 // Serve static files
 api.get('*.*', express.static(__dirname + _client_folder, { maxAge: '10y' }));

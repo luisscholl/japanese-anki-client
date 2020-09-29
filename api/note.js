@@ -1,15 +1,29 @@
-exports.list = (req, res) => {
-  res.json({ status: 'ok' });
-};
+const express = require('express');
+const router = express.Router();
 
-exports.view = (req, res) => {
+// List notes
+router.get('/', (req, res) => {
   res.json({ status: 'ok' });
-};
+});
 
-exports.update = (req, res) => {
+// Get note
+router.get('/:id', (req, res) => {
   res.json({ status: 'ok' });
-};
+});
 
-exports.new = (req, res) => {
+// New note
+router.post('/', (req, res) => {
   res.json({ status: 'ok' });
-};
+});
+
+// Update note
+router.patch('/:id', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// Delete note
+router.delete('/:id', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+module.exports = router;
