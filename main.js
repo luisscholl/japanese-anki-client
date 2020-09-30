@@ -3,14 +3,16 @@ const path = require('path');
 const express = require('express');
 const compression = require('compression');
 
+require('./db').getDb();
 const noteRouter = require('./api/note');
 
 const _port = 80;
 const _client_folder = '/client/dist/client';
 
+
 const api = express();
 api.use(compression());
-
+api.use(express.json());
 
 // Serve API
 api.use('/api/note', noteRouter);
