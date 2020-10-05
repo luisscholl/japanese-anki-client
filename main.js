@@ -15,7 +15,7 @@ api.use(compression());
 api.use(express.json());
 
 // Serve API
-api.use('/api/note', noteRouter);
+api.use('/api/v1/note', noteRouter);
 
 // Serve static files
 api.get('*.*', express.static(__dirname + _client_folder, { maxAge: '10y' }));

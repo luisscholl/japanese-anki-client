@@ -5,6 +5,14 @@ JapaneseAnkiClient builds upon various open source projects. Most of them are in
 
 All of the files within the AnimCJK submodule are subject to AnimCJK's license.
 
+All of the files within the NeDB submodule are subject to NeDB's license (MIT License).
+
+Other files of the JapaneseAnkiClient project are licensed under the terms of the GNU
+Lesser General Public License as published by the Free Software Foundation,
+either version 3 of the license, or (at your option) any later version. You
+should have received a copy of this license (the file "LGPL.txt") along with
+these files; if not, see <http://www.gnu.org/licenses/>.
+
 AnimCJK license 2020-08-23:
 
 > AnimCJK project - Copyright 2016-2019 - Francois Mizessyn
@@ -52,8 +60,27 @@ AnimCJK license 2020-08-23:
 > should have received a copy of this license (the file "LGPL.txt") along with
 > these files; if not, see <http://www.gnu.org/licenses/>.
 
-Other files of the JapaneseAnkiClient project are licensed under the terms of the GNU
-Lesser General Public License as published by the Free Software Foundation,
-either version 3 of the license, or (at your option) any later version. You
-should have received a copy of this license (the file "LGPL.txt") along with
-these files; if not, see <http://www.gnu.org/licenses/>.
+NeDB license 2020-10-05:
+
+> (The MIT License)
+
+> Copyright (c) 2013 Louis Chatriot &lt;louis.chatriot@gmail.com&gt;
+
+> Permission is hereby granted, free of charge, to any person obtaining
+> a copy of this software and associated documentation files (the
+> 'Software'), to deal in the Software without restriction, including
+> without limitation the rights to use, copy, modify, merge, publish,
+> distribute, sublicense, and/or sell copies of the Software, and to
+> permit persons to whom the Software is furnished to do so, subject to
+> the following conditions:
+
+> The above copyright notice and this permission notice shall be
+> included in all copies or substantial portions of the Software.
+
+> THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+> EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+> MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+> IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+> CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+> TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+> SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

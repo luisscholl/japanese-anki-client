@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NoteService } from 'src/app/services/note.service';
 
 @Component({
   selector: 'lj-manage',
@@ -7,9 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ManageComponent implements OnInit {
 
-  constructor() { }
+  value: string = 'Enter something';
+
+  constructor(
+    private notes: NoteService
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  updateValue(e: InputEvent) {
+    this.value = e.data;
+  }
+
+  add() {
+    this.notes.newNote(this.value, this.value);
   }
 
 }
