@@ -5,11 +5,12 @@
   "description": "My Electron application description",
   "main": "main.js",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "concurrently -n FrontEnd,Chimera \"cd client && npm start\" \"electron-forge start\"",
     "package": "electron-forge package",
-    "make": "electron-forge make",
+    "make": "cd client && npm run build && cd .. && electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "lint": "echo \"No linting configured\"",
+    "install": "cd client && npm install && cd .."
   },
   "keywords": [],
   "author": {
