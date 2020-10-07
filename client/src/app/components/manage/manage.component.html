@@ -1,5 +1,8 @@
 <div class="manage">
-  <h1>Testing Area</h1>
-  <input [value]="value" (input)="updateValue($event)" type="text" />
-  <button (click)="add()">Add</button>
+  <input [value]="searchInput" (input)="onSearchInput($event)" type="text" placeholder="Search for notes..." />
+  <div class="notes">
+    <lj-manage-note *ngIf="newNote" [note]="newNote" startInEditMode="true"></lj-manage-note>
+    <lj-manage-note *ngFor="let note of _notes" [note]="note"></lj-manage-note>
+  </div>
+  <button (click)="addNewCard()"><fa-icon [icon]="faPlus"></fa-icon></button>
 </div>

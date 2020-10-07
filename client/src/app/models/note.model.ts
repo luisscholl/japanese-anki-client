@@ -1,5 +1,5 @@
 export class Note {
-  id: string;
+  _id: string;
   japanese: string;
   japanesePronunciation?: string;
   native: string;
@@ -13,4 +13,5 @@ export class Note {
   succeedOnLastReview: boolean;
   lastUpdate: Date;
   update: 'create' | 'update' | 'delete' | 'update_score';
+  tags: string[];
 }

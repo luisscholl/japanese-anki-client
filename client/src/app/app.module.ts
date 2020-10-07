@@ -16,6 +16,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CreditsComponent } from './components/credits/credits.component';
 import { CharacterComponent } from './components/character/character.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ManageNoteComponent } from './components/manage-note/manage-note.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { HttpClientModule } from '@angular/common/http';
     ManageCardComponent,
     SettingsComponent,
     CreditsComponent,
-    CharacterComponent
+    CharacterComponent,
+    ManageNoteComponent
   ],
   imports: [
     BrowserModule,

@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Note } from '../models/note.model';
 import { SettingsService } from './settings.service';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-const Datastore = require('nedb-promises');
+import { Observable, Subscription } from 'rxjs';
+import * as Datastore from '../../../../nedb/browser-version/out/nedb.min';
 
 @Injectable({
   providedIn: 'root'
@@ -11,28 +11,38 @@ const Datastore = require('nedb-promises');
 export class NoteService {
 
   defaultNote: Note = {
-    id: null,
-    japanese: null,
-    japanesePronunciation: null,
-    native: null,
-    cardStatus: null,
+    _id: undefined,
+    japanese: undefined,
+    japanesePronunciation: undefined,
+    native: undefined,
+    cardStatus: undefined,
     score: 0,
     lastReview: new Date(0),
     succeedOnLastReview: false,
-    lastUpdate: null,
-    update: 'create'
+    lastUpdate: undefined,
+    update: 'create',
+    tags: undefined
   };
   cardTypes = [
     'native-japanese-writing',
     'japanese-native-recall'
   ];
-  datastore;
+  db;
 
   constructor(
     private http: HttpClient,
     private settings: SettingsService
   ) { 
-    this.datastore = Datastore.create('notes.db');
+    this.db = new Datastore({ filename: 'notes.db', autoload: true });
+    this.db.ensureIndex({ fieldName: 'japanese' }, err => {
+      if (err) console.log(err);
+    });
+    this.db.ensureIndex({ fieldName: 'native' }, err => {
+      if (err) console.log(err);
+    });
+    this.db.ensureIndex({ fieldName: 'japanesePronunciation' }, err => {
+      if (err) console.log(err);
+    });
     let cardStatus = new Map();
     for (let cardType of this.cardTypes) {
       cardStatus.set(cardType, {
@@ -48,8 +58,8 @@ export class NoteService {
     japanese: string,
     native: string,
     japanesePronunciation?: string,
-    ): void {
-      this._newNote(Object.assign(this.defaultNote, 
+    ): Promise<Note> {
+      return this._newNote(Object.assign(this.defaultNote, 
         { 
           japanese: japanese, 
           native: native, 
@@ -58,9 +68,44 @@ export class NoteService {
         }));
   }
 
-  _newNote(note: Note) {
-    this.datastore.insert(note).then(() => {
-      return this.datastore.find();
+  _newNote(note: Note): Promise<Note> {
+    return new Promise((resolve, reject) => {
+      this.db.insert(note, (err, newDoc) => {
+        if (err) {
+          console.log(err);
+          reject(err);
+        }
+        resolve(newDoc);
+      });
     });
+  }
+
+  search(query: any = new RegExp('')): Promise<Note[]> {
+    return new Promise((resolve, reject) => {
+      this.db.find({
+        $and: [
+          query,
+          { $not: { update: 'delete' }}
+        ]
+      }, (err, docs) => {
+        if (err) {
+          console.log(err);
+          reject(err);
+        }
+        resolve(docs);
+      });
+    });
+  }
+
+  delete(note: Note) {
+    note.lastUpdate = new Date();
+    note.update = 'delete';
+    this.db.update({ _id: note._id }, note);
+  }
+
+  update(note: Note) {
+    note.lastUpdate = new Date();
+    note.update = 'update';
+    this.db.update({ _id: note._id }, note);
   }
 }
