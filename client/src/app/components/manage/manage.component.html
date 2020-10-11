@@ -1,8 +1,12 @@
 <div class="manage">
-  <input [value]="searchInput" (input)="onSearchInput($event)" type="text" placeholder="Search for notes..." />
-  <div class="notes">
-    <lj-manage-note *ngIf="newNote" [note]="newNote" startInEditMode="true"></lj-manage-note>
-    <lj-manage-note *ngFor="let note of _notes" [note]="note"></lj-manage-note>
+  <div class="search">
+    <input [value]="searchInput" (input)="onSearchInput($event)" type="text" placeholder="Search for notes..." />
   </div>
-  <button (click)="addNewCard()"><fa-icon [icon]="faPlus"></fa-icon></button>
+  <div class="notes">
+    <lj-manage-note *ngIf="newNote" [note]="newNote" startInEditMode="true" (collapse)="resetSearch()" (delete)="onNoteDeleted()"></lj-manage-note>
+    <lj-manage-note *ngFor="let note of _notes" [note]="note" (delete)="onNoteDeleted()"></lj-manage-note>
+  </div>
+  <div class="controls">
+    <button (click)="addNewCard()" class="add"><fa-icon [icon]="faPlus"></fa-icon></button>
+  </div>
 </div>

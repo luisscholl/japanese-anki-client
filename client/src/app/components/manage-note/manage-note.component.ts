@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, ViewEncapsulation, EventEmitter } from '@angular/core';
 import { Note } from 'src/app/models/note.model';
 import { faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { NoteService } from 'src/app/services/note.service';
@@ -6,7 +6,8 @@ import { NoteService } from 'src/app/services/note.service';
 @Component({
   selector: 'lj-manage-note',
   templateUrl: './manage-note.component.html',
-  styleUrls: ['./manage-note.component.scss']
+  styleUrls: ['./manage-note.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ManageNoteComponent implements OnInit {
 
@@ -23,6 +24,9 @@ export class ManageNoteComponent implements OnInit {
   @Input() note: Note;
   @Input() startInEditMode: boolean = false;
 
+  @Output() collapse: EventEmitter<null> = new EventEmitter();
+  @Output() delete: EventEmitter<null> = new EventEmitter();
+
   ngOnInit(): void {
     if(this.startInEditMode) this.collapsed = false;
   }
@@ -31,13 +35,15 @@ export class ManageNoteComponent implements OnInit {
     this.collapsed = false;
   }
 
-  collapse() {
+  _collapse() {
     this.collapsed = true;
+    this.collapse.emit();
   }
 
-  delete() {
+  _delete() {
     this.notes.delete(this.note);
     this.deleted = true;
+    this.delete.emit();
   }
 
   updateJapanese(e: InputEvent) {

@@ -9,7 +9,8 @@
   display: flex;
   flex-direction: column;
 
-  h1, h2 {
+  h1,
+  h2 {
     margin: 0;
     padding: 1rem;
     text-align: center;
@@ -18,7 +19,7 @@
     z-index: 1;
   }
 
-  & > button {
+  &>button {
     color: $base00;
     border: 3px solid $yellow;
     background-color: $base3;
@@ -93,7 +94,8 @@
         }
       }
 
-      &:before, &:after {
+      &:before,
+      &:after {
         content: '';
         display: block;
         background-color: $base2;
@@ -112,7 +114,7 @@
     }
   }
 
-  & > .controls {
+  &>.controls {
     width: 100vw;
     height: 2cm;
     display: flex;

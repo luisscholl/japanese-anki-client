@@ -1,0 +1,74 @@
+@import '../../../styles/colors.scss';
+
+.manage-note {
+  border: 2px solid $cyan;
+  border-radius: 0.5rem;
+  background-color: $base3;
+  margin-bottom: 0.5rem;
+
+  .collapsed {
+    background-color: transparent;
+    border: none;
+    text-align: center;
+    width: 100%;
+  }
+
+  .expanded {
+
+    .controls {
+      width: 100%;
+      display: flex;
+
+      button {
+        background-color: transparent;
+        border: none;
+        flex-grow: 1;
+
+        svg {
+          width: 1.7rem;
+          height: 1.7rem;
+          padding: 0.4rem 0;
+        }
+
+        &.delete {
+          color: $red;
+          border-bottom: 2px solid $red;
+        }
+
+        &.collapse {
+          color: $yellow;
+          border-bottom: 2px solid $yellow;
+        }
+      }
+    }
+
+    .data {
+      padding: 0.4rem;
+
+      &>* {
+        display: block;
+        width: 100%;
+      }
+
+      label {
+        margin-bottom: 0.2rem;
+      }
+
+      input {
+        margin-bottom: 0.1rem;
+        background-color: $base3;
+        color: $base02;
+        border: 1px solid $base0;
+        padding: 0.1rem 0.3rem 0.2rem 0.3rem;
+
+        &:focus {
+          border-color: $blue;
+        }
+      }
+    }
+  }
+
+  &.deleted {
+    display: none;
+  }
+}

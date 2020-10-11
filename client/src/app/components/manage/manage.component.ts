@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Note } from 'src/app/models/note.model';
 import { NoteService } from 'src/app/services/note.service';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -6,7 +6,8 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'lj-manage',
   templateUrl: './manage.component.html',
-  styleUrls: ['./manage.component.scss']
+  styleUrls: ['./manage.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ManageComponent implements OnInit {
 
@@ -15,6 +16,7 @@ export class ManageComponent implements OnInit {
   _notes: Note[];
   newNote: Note;
   searchInput = '';
+  lastSearchString = '';
 
   constructor(
     private notes: NoteService
@@ -33,10 +35,10 @@ export class ManageComponent implements OnInit {
     // * Document that the search takes Regex strings
     // * Evaluate whether it is good to take Regex strings
     //   * if applicable escape search string
-    const searchString = (e.target as HTMLInputElement).value.trim();
+    this.lastSearchString = (e.target as HTMLInputElement).value.trim();
     let query;
     try {
-      query = new RegExp(searchString, 'iu');
+      query = new RegExp(this.lastSearchString, 'iu');
     } catch (err) {
       return;
     }
@@ -60,6 +62,7 @@ export class ManageComponent implements OnInit {
     ]})
     .then(resolved => {
       this.searchInput = '_New Note_';
+      this.lastSearchString = '_New Note_';
       if (resolved.length > 0) {
         this._notes = null;
         this.newNote = resolved[0];
@@ -71,6 +74,20 @@ export class ManageComponent implements OnInit {
         })
       }
     })
+  }
+
+  resetSearch() {
+    this.searchInput = '';
+    this.newNote = null;
+    this.notes.search({}).then(resolved => {
+      this._notes = resolved;
+    });
+  }
+
+  onNoteDeleted() {
+    if (this.lastSearchString === '_New Note_') {
+      this.searchInput = '';
+    }
   }
 
 }

@@ -1,16 +1,20 @@
-<div class="manage-note">
+<div [ngClass]="'manage-note' + (deleted ? ' deleted' : '')">
   <button *ngIf="collapsed && !deleted" class="collapsed" (click)="expand()">
     <p>{{note.japanese}}</p>
     <p>{{note.native}}</p>
   </button>
   <div *ngIf="!collapsed && !deleted" class="expanded">
-    <button (click)="delete()"><fa-icon [icon]="faTrash"></fa-icon></button>
-    <button (click)="collapse()"><fa-icon [icon]="faTimes"></fa-icon></button>
-    <input [value]="note.japanese" (input)="updateJapanese($event)" type="text" />
-    <input [value]="note.japanesePronunciation" (input)="updateJapanesePronunciation($event)" type="text" />
-    <input [value]="note.native" (input)="updateNative($event)" type="text" />
-  </div>
-  <div *ngIf="deleted" class="deleted">
-    Poof!
+    <div class="controls">
+      <button (click)="_delete()" class="delete"><fa-icon [icon]="faTrash"></fa-icon></button>
+      <button (click)="_collapse()" class="collapse"><fa-icon [icon]="faTimes"></fa-icon></button>
+    </div>
+    <div class="data">
+      <label for="Japanese">Japanese</label>
+      <input [value]="note.japanese" (input)="updateJapanese($event)" type="text" id="Japanese" />
+      <label for="Japanese pronunciation">Japanese pronunciation</label>
+      <input [value]="note.japanesePronunciation" (input)="updateJapanesePronunciation($event)" type="text" id="Japanese pronunciation" />
+      <label for="Native">Native</label>
+      <input [value]="note.native" (input)="updateNative($event)" type="text" id="native" />
+    </div>
   </div>
 </div>

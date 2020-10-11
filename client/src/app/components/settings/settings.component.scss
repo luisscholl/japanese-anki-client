@@ -14,7 +14,12 @@
   input[type=text] {
     background-color: $base3;
     color: $base02;
-    border: 1px solid $blue;
+    border: 1px solid $base0;
     width: 100%;
+    padding: 0.1rem 0.3rem 0.2rem 0.3rem;
+
+    &:focus {
+      border-color: $blue;
+    }
   }
 }
