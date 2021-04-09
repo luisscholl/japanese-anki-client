@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  baseUrl: '/',
   apiBaseUrl: 'http://localhost',
   learningPhaseIntervalsInMinutes: [15, 24 * 60, 6 * 24 * 60],
   relearningPhaseIntervalsInMinutes: [20],

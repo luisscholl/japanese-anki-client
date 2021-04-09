@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  baseUrl: '/japanese-anki-client/client/dist/client',
   apiBaseUrl: 'http://localhost',
   learningPhaseIntervalsInMinutes: [15, 24 * 60, 6 * 24 * 60],
   relearningPhaseIntervalsInMinutes: [20],
