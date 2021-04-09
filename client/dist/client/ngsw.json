@@ -1,7 +1,7 @@
 {
   "configVersion": 1,
-  "timestamp": 1617985239917,
-  "index": "/index.html",
+  "timestamp": 1617985438883,
+  "index": "/japanese-anki-client/client/dist/client/index.html",
   "assetGroups": [
     {
       "name": "app",
@@ -6412,27 +6412,19 @@
   "navigationUrls": [
     {
       "positive": true,
-      "regex": "^\\/$"
+      "regex": "^\\/.*$"
     },
     {
-      "positive": true,
-      "regex": "^\\/$"
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
     },
     {
-      "positive": true,
-      "regex": "^\\/credits$"
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
     },
     {
-      "positive": true,
-      "regex": "^\\/settings$"
-    },
-    {
-      "positive": true,
-      "regex": "^\\/manage$"
-    },
-    {
-      "positive": true,
-      "regex": "^\\/study$"
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
     }
   ]
 }

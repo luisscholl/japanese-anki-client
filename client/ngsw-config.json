@@ -1,7 +1,6 @@
 {
   "$schema": "./node_modules/@angular/service-worker/config/schema.json",
-  "index": "/index.html",
-  "navigationUrls": ["", "/", "/credits", "/settings", "/manage", "/study"],
+  "index": "/japanese-anki-client/client/dist/client/index.html",
   "assetGroups": [
     {
       "name": "app",
