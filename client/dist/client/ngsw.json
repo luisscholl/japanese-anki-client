@@ -1,7 +1,7 @@
 {
   "configVersion": 1,
-  "timestamp": 1617985728742,
-  "index": "/./index.html",
+  "timestamp": 1617986127768,
+  "index": "/japanese-anki-client/client/dist/client/index.html",
   "assetGroups": [
     {
       "name": "app",
