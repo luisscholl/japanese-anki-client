@@ -3,4 +3,4 @@
 	url = https://github.com/parsimonhi/animCJK.git
 [submodule "nedb"]
 	path = nedb
-	url = git@github.com:louischatriot/nedb.git
+	url = https://github.com/louischatriot/nedb.git
