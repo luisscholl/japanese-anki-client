@@ -17,6 +17,8 @@ import { CreditsComponent } from './components/credits/credits.component';
 import { CharacterComponent } from './components/character/character.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ManageNoteComponent } from './components/manage-note/manage-note.component';
+import { NewCardComponent } from './components/new-card/new-card.component';
+import { ScratchpadComponent } from './components/scratchpad/scratchpad.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import { ManageNoteComponent } from './components/manage-note/manage-note.compon
     SettingsComponent,
     CreditsComponent,
     CharacterComponent,
-    ManageNoteComponent
+    ManageNoteComponent,
+    NewCardComponent,
+    ScratchpadComponent
   ],
   imports: [
     BrowserModule,

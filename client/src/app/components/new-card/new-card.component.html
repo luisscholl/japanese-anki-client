@@ -1,0 +1,9 @@
+<div class="card new">
+  <h1>{{_card.japanese}}</h1>
+  <h2 *ngIf="_card.japanesePronunciation">{{_card.japanesePronunciation}}</h2>
+  <h2>{{_card.native}}</h2>
+  <lj-scratchpad [word]="_card.japanese" [renderEmpty]="false"></lj-scratchpad>
+  <div class="controls">
+    <button class="succeed" (click)="succeed()"><fa-icon [icon]="faCheck"></fa-icon></button>
+  </div>
+</div>

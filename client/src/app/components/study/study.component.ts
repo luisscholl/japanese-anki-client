@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CardService } from './../../services/card.service';
 import { Card } from 'src/app/models/card.model';
+import { NoteService } from 'src/app/services/note.service';
 
 @Component({
   selector: 'lj-study',
@@ -12,15 +12,29 @@ export class StudyComponent implements OnInit {
   card: Card;
 
   constructor(
-    private cardService: CardService
+    private noteService: NoteService
   ) { }
 
   ngOnInit(): void {
-    this.card = this.cardService.first();
+    this.noteService.initReviewSessionAndGetFirstCard().then(card => {
+      this.card = card;
+      if (!this.card) {
+        alert('Finished all due cards! :)');
+        history.back();
+      }
+    })
   }
 
-  next(succeeded: boolean) {
-    this.card = this.cardService.next(succeeded);
+  next(succeeded: 'fail' | 'hard' | 'good' | 'easy') {
+    this.noteService.scheduleCurrentCardAndGetNext(succeeded).then(card => {
+      // todo: Check for null and tell the user that they are done or similar.
+      console.log(card);
+      this.card = card;
+      if (!this.card) {
+        alert('Finished all due cards! :)');
+        history.back();
+      }
+    });
   }
 
 }

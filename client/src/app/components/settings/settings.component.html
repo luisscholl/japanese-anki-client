@@ -1,4 +1,100 @@
 <div class="settings">
-  <h3 i18n="IP address or URL of the computer or server, which runs the Anki client with AnkiConnect for synchronization across devices">AnkiConnect Address</h3>
-  <input type="text" [value]="apiBaseUrl" (input)="apiBaseUrlChange($event)" (focus)="select($event)" placeholder="IP/URL of your AnkiConnect instance" i18n-placeholder="IP address or URL of the computer or server, which runs the Anki client with AnkiConnect for synchronization across devices">
+  <h3>Learning Phase Intervals In Minutes</h3>
+  <input
+    type="text"
+    [value]="settings.getLearningPhaseIntervalsInMinutes().join(', ')"
+    (input)="learningPhaseIntervalsInMinutesChange($event)"
+    (focus)="select($event)"
+  />
+  <h3>Relearning Phase Intervals In Minutes</h3>
+  <input
+    type="text"
+    [value]="settings.getRelearningPhaseIntervalsInMinutes().join(', ')"
+    (input)="relearningPhaseIntervalsInMinutesChange($event)"
+    (focus)="select($event)"
+  />
+  <h3>Graduating Interval In Days</h3>
+  <input
+    type="text"
+    [value]="settings.getGraduatingIntervalInDays()"
+    (input)="graduatingIntervalInDaysChange($event)"
+    (focus)="select($event)"
+  />
+  <h3>Graduating Ease</h3>
+  <input
+    type="text"
+    [value]="settings.getGraduatingEase()"
+    (input)="graduatingEaseChange($event)"
+    (focus)="select($event)"
+  />
+  <h3>Scheduling Deviation in Seconds</h3>
+  <input
+    type="text"
+    [value]="settings.getSchedulingDeviationInSeconds()"
+    (input)="schedulingDeviationChange($event)"
+    (focus)="select($event)"
+  />
+  <h3>Easy Bonus</h3>
+  <input
+    type="text"
+    [value]="settings.getEasyBonus()"
+    (input)="easyBonusChange($event)"
+    (focus)="select($event)"
+  />
+  <h3>Fail Ease Modifier</h3>
+  <input
+    type="text"
+    [value]="settings.getFailEaseModifier()"
+    (input)="failEaseModifierChange($event)"
+    (focus)="select($event)"
+  />
+  <h3>Hard Ease Modifier</h3>
+  <input
+    type="text"
+    [value]="settings.getHardEaseModifier()"
+    (input)="hardEaseModifierChange($event)"
+    (focus)="select($event)"
+  />
+  <h3>Good Ease Modifier</h3>
+  <input
+    type="text"
+    [value]="settings.getGoodEaseModifier()"
+    (input)="goodEaseModifierChange($event)"
+    (focus)="select($event)"
+  />
+  <h3>Easy Ease Modifier</h3>
+  <input
+    type="text"
+    [value]="settings.getEasyEaseModifier()"
+    (input)="easyEaseModifierChange($event)"
+    (focus)="select($event)"
+  />
+  <h3>Minimal Ease</h3>
+  <input
+    type="text"
+    [value]="settings.getMinEase()"
+    (input)="minEaseChange($event)"
+    (focus)="select($event)"
+  />
+  <h3>Relearn Passed Interval Modifier</h3>
+  <input
+    type="text"
+    [value]="settings.getRelearnPassedIntervalModifier()"
+    (input)="relearnPassedIntervalModifierChange($event)"
+    (focus)="select($event)"
+  />
+  <h3>Minimal Relearn Passed Interval in Days</h3>
+  <input
+    type="text"
+    [value]="settings.getMinRelearnPassedIntervalInDays()"
+    (input)="minRelearnPassedIntervalInDaysChange($event)"
+    (focus)="select($event)"
+  />
+  <h3>Leech Threshold</h3>
+  <input
+    type="text"
+    [value]="settings.getLeechThreshold()"
+    (input)="leechThresholdChange($event)"
+    (focus)="select($event)"
+  />
 </div>

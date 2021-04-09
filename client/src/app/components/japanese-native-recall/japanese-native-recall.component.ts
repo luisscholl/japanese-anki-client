@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Card } from 'src/app/models/card.model';
-import { faTimes, faArrowRight, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faArrowRight, faCheck, faFrownOpen, faCrown } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'lj-japanese-native-recall',
@@ -10,9 +10,11 @@ import { faTimes, faArrowRight, faCheck } from '@fortawesome/free-solid-svg-icon
 })
 export class JapaneseNativeRecallComponent implements OnInit {
 
-  faTimes = faTimes;
   faArrowRight = faArrowRight;
+  faTimes = faTimes;
+  faFrownOpen = faFrownOpen;
   faCheck = faCheck;
+  faCrown = faCrown;
 
   _card: Card;
   pronunciationVisible = false;
@@ -25,7 +27,7 @@ export class JapaneseNativeRecallComponent implements OnInit {
     this.pronunciationVisible = false;
   }
 
-  @Output() next: EventEmitter<boolean> = new EventEmitter();
+  @Output() next: EventEmitter<'fail' | 'hard' | 'good' | 'easy'> = new EventEmitter();
 
   constructor() { }
 
@@ -36,16 +38,11 @@ export class JapaneseNativeRecallComponent implements OnInit {
     this.pronunciationVisible = true;
   }
 
-  fail(): void {
-    this.next.emit(true);
-  }
-
   check(): void {
     this.allVisible = true;
   }
 
-  succeed(): void {
-    this.next.emit(true);
+  _next(quality: 'fail' | 'hard' | 'good' | 'easy'): void {
+    this.next.emit(quality);
   }
-
 }

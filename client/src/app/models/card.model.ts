@@ -1,7 +1,14 @@
 export class Card {
-  type: 'native-japanese-writing' | 'japanese-native-recall';
+  type: "new-card" | "native-japanese-writing" | "japanese-native-recall";
   japanese: string;
   japanesePronunciation?: string;
   native: string;
-  score: number;
+  stage: "new" | "learn" | "review" | "relearn";
+  lapses: number;
+  ease: number;
+  reviews: number;
+  lastIntervalInMillis: number;
+  lastReview: Date;
+  scheduledReview: Date;
+  tags: string[];
 }

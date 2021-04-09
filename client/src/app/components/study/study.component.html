@@ -1,4 +1,5 @@
-<div class="study" [ngSwitch]="card.type">
+<div *ngIf="card" class="study" [ngSwitch]="card.type">
+  <lj-new-card *ngSwitchCase="'new-card'" [card]="card" (next)="next($event)"></lj-new-card>
   <lj-native-japanese-writing *ngSwitchCase="'native-japanese-writing'" [card]="card" (next)="next($event)"></lj-native-japanese-writing>
   <lj-japanese-native-recall *ngSwitchCase="'japanese-native-recall'" [card]="card" (next)="next($event)"></lj-japanese-native-recall>
 </div>

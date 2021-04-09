@@ -1,26 +1,15 @@
 <div class="card native-japanese-writing">
   <h1 *ngIf="nativeVisible">{{_card.native}}</h1>
-  <h2 *ngIf="nativeVisible && allVisible">{{_card.japanesePronunciation}}</h2>
+  <h2 *ngIf="nativeVisible && allVisible">{{_card.japanese}}</h2>
+  <h2 *ngIf="_card.japanesePronunciation && nativeVisible && allVisible">{{_card.japanesePronunciation}}</h2>
   <button *ngIf="nativeVisible" ngClass="hide-native" (click)="hideNative()"><fa-icon [icon]="faEyeSlash"></fa-icon></button>
   <button *ngIf="!nativeVisible" ngClass="show-native" (click)="showNative()"><fa-icon [icon]="faEye"></fa-icon></button>
-  <div class="canvas-wrapper" 
-    #canvasWrapper
-    (scroll)="onScroll($event)">
-    <div class="solution">
-      <lj-character *ngFor="let character of _card.japanese.split('').concat(whitespaceCharacters)" [character]="character" 
-      [renderEmpty]="!allVisible" (erase)="erase($event)"></lj-character>
-      <lj-character #solutionHightMeasure [character]="''" [renderEmpty]="!allVisible" (erase)="erase($event)"></lj-character>
-    </div>
-    <canvas #canvas [ngClass]="allVisible ? 'back' : ''"
-      (mousemove)="mousemove($event)"
-      (touchmove)="touchmove($event)"
-      (mouseleave)="endPath($event)"
-      (touchend)="endPath($event)"
-    ></canvas>
-  </div>
+  <lj-scratchpad [word]="_card.japanese" [renderEmpty]="!allVisible"></lj-scratchpad>
   <div class="controls">
-    <button *ngIf="allVisible" class="fail" (click)="fail()"><fa-icon [icon]="faTimes"></fa-icon></button>
     <button *ngIf="!allVisible" class="check" (click)="check()"><fa-icon [icon]="faArrowRight"></fa-icon></button>
-    <button *ngIf="allVisible" class="succeed" (click)="succeed()"><fa-icon [icon]="faCheck"></fa-icon></button>
+    <button *ngIf="allVisible" class="fail" (click)="_next('fail')"><fa-icon [icon]="faTimes"></fa-icon></button>
+    <button *ngIf="_card.stage === 'review' && allVisible" class="hard" (click)="_next('hard')"><fa-icon [icon]="faFrownOpen"></fa-icon></button>
+    <button *ngIf="allVisible" class="good" (click)="_next('good')"><fa-icon [icon]="faCheck"></fa-icon></button>
+    <button *ngIf="_card.stage === 'review' && allVisible" class="easy" (click)="_next('easy')"><fa-icon [icon]="faCrown"></fa-icon></button>
   </div>
 </div>

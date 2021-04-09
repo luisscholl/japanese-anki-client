@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewEncapsulation, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, Input, ViewEncapsulation, ViewChild, ElementRef, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { SvgService } from 'src/app/services/svg.service';
 import { SafeHtml } from '@angular/platform-browser';
 import { faPlayCircle, faEraser } from '@fortawesome/free-solid-svg-icons';
@@ -9,7 +9,7 @@ import { faPlayCircle, faEraser } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./character.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class CharacterComponent implements OnInit {
+export class CharacterComponent implements AfterViewInit {
 
   faPlayCircle = faPlayCircle;
   faEraser = faEraser;
@@ -34,16 +34,14 @@ export class CharacterComponent implements OnInit {
     private svgService: SvgService
   ) { }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.svgService.getFromCharacter(this.character).subscribe(e => {
       this.svg = e;
-      console.log(this.svg);
       this.svgWrapper.nativeElement.innerHTML = this._renderEmpty ? '' : this.svg as string;
     });
   }
 
   play(): void {
-    console.log('play');
     this.animationDone = false;
     this.svgWrapper.nativeElement.innerHTML = '';
     this.svgWrapper.nativeElement.innerHTML = this.svg as string;

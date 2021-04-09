@@ -1,0 +1,76 @@
+@import "../../../styles/colors.scss";
+
+.scratchpad {
+  position: absolute;
+  height: 100%;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  padding-left: 2cm;
+  background-image: linear-gradient(
+    to right,
+    $base2 0,
+    $base2 2cm,
+    $base3 2cm,
+    $base3 100%
+  );
+
+  .solution {
+    height: 0;
+
+    .character {
+      width: 100%;
+      height: 0;
+      padding-bottom: 100%;
+
+      .svg-wrapper {
+        width: 100%;
+        height: 100%;
+        border: 3px solid $base2;
+        border-top: none;
+      }
+
+      .controls {
+        width: 2cm;
+        margin-left: -2cm;
+
+        button {
+          width: 100%;
+          border: none;
+          background-color: transparent;
+          margin-bottom: 0.15cm;
+
+          &:first-child {
+            color: $blue;
+          }
+
+          &:nth-child(2) {
+            color: $violet;
+          }
+
+          svg {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    }
+
+    &:before,
+    &:after {
+      content: "";
+      display: block;
+      background-color: $base2;
+      width: 100%;
+      height: 0.5cm;
+    }
+  }
+
+  canvas {
+    z-index: -1;
+    width: 100%;
+
+    &.back {
+      opacity: 50%;
+    }
+  }
+}

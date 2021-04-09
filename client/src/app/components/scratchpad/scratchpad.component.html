@@ -1,0 +1,23 @@
+<div class="scratchpad" #scratchpad (scroll)="onScroll($event)">
+  <div class="solution" *ngIf="_word">
+    <lj-character
+      *ngFor="let character of _word.split('').concat(whitespaceCharacters)"
+      [character]="character"
+      [renderEmpty]="_renderEmpty"
+      (erase)="erase($event)"
+    ></lj-character>
+    <lj-character
+      #solutionHightMeasure
+      [character]="''"
+      [renderEmpty]="_renderEmpty"
+      (erase)="erase($event)"
+    ></lj-character>
+  </div>
+  <canvas
+    #canvas
+    (mousemove)="mousemove($event)"
+    (touchmove)="touchmove($event)"
+    (mouseleave)="endPath($event)"
+    (touchend)="endPath($event)"
+  ></canvas>
+</div>

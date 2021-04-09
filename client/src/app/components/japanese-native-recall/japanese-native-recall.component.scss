@@ -48,19 +48,29 @@
         height: 100%;
       }
 
-      &.fail {
-        color: $red;
-        border-top: 3px solid $red;
-      }
-
       &.check {
         color: $yellow;
         border-top: 3px solid $yellow;
       }
 
-      &.succeed {
+      &.fail {
+        color: $red;
+        border-top: 3px solid $red;
+      }
+
+      &.hard {
+        color: $orange;
+        border-top: 3px solid $orange;
+      }
+
+      &.good {
         color: $green;
         border-top: 3px solid $green;
+      }
+
+      &.easy {
+        color: $blue;
+        border-top: 3px solid $blue;
       }
     }
   }

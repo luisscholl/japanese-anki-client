@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from './../../services/settings.service';
-import { SyncService } from './../../services/sync.service';
 
 @Component({
   selector: 'lj-settings',
@@ -10,25 +9,80 @@ import { SyncService } from './../../services/sync.service';
 export class SettingsComponent implements OnInit {
 
   constructor(
-    private settingsService: SettingsService,
-    private syncService: SyncService
+    public settings: SettingsService
   ) { }
 
-  apiBaseUrl = '';
-  decks: string[] = [];
-
-  ngOnInit(): void { 
-    this.settingsService.getApiBaseUrl().subscribe(apiBaseUrl => {
-      if (apiBaseUrl) this.apiBaseUrl = apiBaseUrl;
-    });
+  ngOnInit(): void {
   }
 
-  apiBaseUrlChange(e: InputEvent) {
-    this.apiBaseUrl = (e.target as HTMLInputElement).value;
-    this.settingsService.setApiBaseUrl(this.apiBaseUrl);
-    this.syncService.updateDeckList();
-    this.syncService.getDecks().subscribe(e => this.decks = e);
-    console.log(this.decks);
+  learningPhaseIntervalsInMinutesChange(e: InputEvent) {
+    let intervals: number[] = (e.target as HTMLInputElement).value.replace(/ /g, '').split(',').map(e => parseInt(e));
+    if (!intervals.includes(NaN)) this.settings.setLearningPhaseIntervalsInMinutes(intervals);
+  }
+
+  relearningPhaseIntervalsInMinutesChange(e: InputEvent) {
+    let intervals: number[] = (e.target as HTMLInputElement).value.replace(/ /g, '').split(',').map(e => parseInt(e));
+    if (!intervals.includes(NaN)) this.settings.setRelearningPhaseIntervalsInMinutes(intervals);
+  }
+
+  graduatingIntervalInDaysChange(e: InputEvent) {
+    let interval: number = parseInt((e.target as HTMLInputElement).value.replace(/ /g, ''));
+    if (!isNaN(interval)) this.settings.setGraduatingIntervalInDays(interval);
+  }
+
+  graduatingEaseChange(e: InputEvent) {
+    let ease: number = parseInt((e.target as HTMLInputElement).value.replace(/ /g, ''));
+    if (!isNaN(ease)) this.settings.setGraduatingEase(ease);
+  }
+
+  schedulingDeviationChange(e: InputEvent) {
+    let deviation: number = parseInt((e.target as HTMLInputElement).value.replace(/ /g, ''));
+    if (!isNaN(deviation)) this.settings.setSchedulingDeviationInSeconds(deviation);
+  }
+
+  easyBonusChange(e: InputEvent) {
+    let bonus: number = parseInt((e.target as HTMLInputElement).value.replace(/ /g, ''));
+    if (!isNaN(bonus)) this.settings.setEasyBonus(bonus);
+  }
+
+  failEaseModifierChange(e: InputEvent) {
+    let modifier: number = parseInt((e.target as HTMLInputElement).value.replace(/ /g, ''));
+    if (!isNaN(modifier)) this.settings.setFailEaseModifier(modifier);
+  }
+
+  hardEaseModifierChange(e: InputEvent) {
+    let modifier: number = parseInt((e.target as HTMLInputElement).value.replace(/ /g, ''));
+    if (!isNaN(modifier)) this.settings.setHardEaseModifier(modifier);
+  }
+
+  goodEaseModifierChange(e: InputEvent) {
+    let modifier: number = parseInt((e.target as HTMLInputElement).value.replace(/ /g, ''));
+    if (!isNaN(modifier)) this.settings.setGoodEaseModifier(modifier);
+  }
+
+  easyEaseModifierChange(e: InputEvent) {
+    let modifier: number = parseInt((e.target as HTMLInputElement).value.replace(/ /g, ''));
+    if (!isNaN(modifier)) this.settings.setEasyEaseModifier(modifier);
+  }
+
+  minEaseChange(e: InputEvent) {
+    let min: number = parseInt((e.target as HTMLInputElement).value.replace(/ /g, ''));
+    if (!isNaN(min)) this.settings.setMinEase(min);
+  }
+
+  relearnPassedIntervalModifierChange(e: InputEvent) {
+    let modifier: number = parseInt((e.target as HTMLInputElement).value.replace(/ /g, ''));
+    if (!isNaN(modifier)) this.settings.setRelearnPassedIntervalModifier(modifier);
+  }
+
+  minRelearnPassedIntervalInDaysChange(e: InputEvent) {
+    let min: number = parseInt((e.target as HTMLInputElement).value.replace(/ /g, ''));
+    if (!isNaN(min)) this.settings.setMinRelearnPassedIntervalInDays(min);
+  }
+
+  leechThresholdChange(e: InputEvent) {
+    let threshold: number = parseInt((e.target as HTMLInputElement).value.replace(/ /g, ''));
+    if (!isNaN(threshold)) this.settings.setLeechThreshold(threshold);
   }
 
   select(e: FocusEvent) {
