@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1617990247046,
+  "timestamp": 1617990816351,
   "index": "/japanese-anki-client/client/dist/client/index.html",
   "assetGroups": [
     {
@@ -6405,7 +6405,7 @@
     "/japanese-anki-client/client/dist/client/assets/jaSVGs/64104.svg": "7f586d869c88b8817531389a933df70582cd85d2",
     "/japanese-anki-client/client/dist/client/assets/jaSVGs/64105.svg": "6e31925ea64a90f2a84aca59a05e626e9c5d9dd0",
     "/japanese-anki-client/client/dist/client/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/japanese-anki-client/client/dist/client/index.html": "cd527321ad15f9d3ea1e74d3f5893fa415e54b18",
+    "/japanese-anki-client/client/dist/client/index.html": "682b27ea50be0d76bfc2b18201d0e2ae2771a83b",
     "/japanese-anki-client/client/dist/client/main-es2018.b5028facdf3d24a3e6db.js": "e67a84fe2432da5460a881c9070304e228d64462",
     "/japanese-anki-client/client/dist/client/main-es5.b5028facdf3d24a3e6db.js": "36720e47fe4325295634632b009997d6c402d100",
     "/japanese-anki-client/client/dist/client/manifest.webmanifest": "aa1e7b1343056a9ab5d83be48907561f3570fe4f",
