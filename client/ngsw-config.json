@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/@angular/service-worker/config/schema.json",
-  "index": "/japanese-anki-client/client/dist/client/index.html",
+  "index": "/index.html",
   "assetGroups": [
     {
       "name": "app",
@@ -8,12 +8,12 @@
       "updateMode": "prefetch",
       "resources": {
         "files": [
-          "/japanese-anki-client/client/dist/client/favicon.ico",
-          "/japanese-anki-client/client/dist/client/index.html",
-          "/japanese-anki-client/client/dist/client/manifest.webmanifest",
-          "/japanese-anki-client/client/dist/client/*.css",
-          "/japanese-anki-client/client/dist/client/*.js",
-          "/japanese-anki-client/client/dist/client/*.json"
+          "/favicon.ico",
+          "/index.html",
+          "/manifest.webmanifest",
+          "/*.css",
+          "/*.js",
+          "/*.json"
         ]
       }
     },
@@ -23,8 +23,8 @@
       "updateMode": "prefetch",
       "resources": {
         "files": [
-          "/japanese-anki-client/client/dist/client/assets/**",
-          "/japanese-anki-client/client/dist/client/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
+          "/assets/**",
+          "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
         ]
       }
     }
