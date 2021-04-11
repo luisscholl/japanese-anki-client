@@ -10,7 +10,7 @@
     "make": "cd client && npm run build && cd .. && electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
-    "install": "npm i -g concurrently && npm i -g @angular/cli && cd client && npm install && cd .."
+    "install": "git submodule update --init --recursive && npm i -g concurrently && npm i -g @angular/cli && cd client && npm install && cd .."
   },
   "keywords": [],
   "author": {

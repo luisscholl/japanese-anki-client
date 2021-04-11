@@ -20,6 +20,10 @@ This means that users will host their own backend without requiring technical kn
 
 ## Development
 
+### Installation
+
+Prerequisites: curl, Swiss File Knife, Git, Node, npm
+
 Run ```npm install && npm install -g concurrently``` to setup a development environment.
 
 Run ```npm start``` to start the Electron app and the development server of the frontend localhost:4200. Note that the frontend, which runs inside of the Electron app uses the latest build, which you can generate with ```npm run build``` in the client folder. This - most of the time outdated - version of the frontend can also be accessed at localhost:80.
