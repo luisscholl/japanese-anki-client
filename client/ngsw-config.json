@@ -28,5 +28,18 @@
         ]
       }
     }
+  ],
+  "dataGroups": [
+    {
+      "name": "stroke-order-svgs",
+      "urls": [
+        "/assets/jaSVGs/*.svg"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 100000,
+        "maxAge": "36500d"
+      }
+    }
   ]
 }
