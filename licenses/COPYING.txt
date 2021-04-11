@@ -7,8 +7,6 @@ All of the files within the AnimCJK submodule are subject to AnimCJK's license.
 
 All of the files within the NeDB submodule are subject to NeDB's license (MIT License).
 
-The ngsw-worker.js file (the one which is pulled using curl during build) is  based on copyrighted code by Google Inc., which is covered by an MIT-style license, and modified by George Kalpakas. Ask George Kalpakas (https://github.com/gkalpak) about the license for ngsw-worker.js.
-
 Other files of the JapaneseAnkiClient project are licensed under the terms of the GNU
 Lesser General Public License as published by the Free Software Foundation,
 either version 3 of the license, or (at your option) any later version. You
@@ -86,10 +84,3 @@ NeDB license 2020-10-05:
 > CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 > TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 > SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-ngsw-worker.js license before modification:
-
-> Copyright Google Inc. All Rights Reserved.
->
-> Use of this source code is governed by an MIT-style license that can be
-> found in the LICENSE file at https://angular.io/license
