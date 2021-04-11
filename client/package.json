@@ -4,12 +4,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
-    "build": "ng build --prod && npm run generateAttributions",
+    "build": "ng build --prod --base-href /japanese-anki-client/client/dist/client/ && npm run generateAttributions && npm run getModifiedServiceWorker",
     "install": "npm run getJaSVGs",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2ea",
     "generateAttributions": "npx oss-attribution-generator && mv oss-attribution/attribution.txt ../licenses/npm-licenses.txt && rm -r oss-attribution",
+    "getModifiedServiceWorker": "curl https://gist.githubusercontent.com/gkalpak/3d1b73f6c693df2d8cdcbabbed57d987/raw/b24af0891288d77ee3b5497575530651e2fd4198/ngsw-worker.js > dist/client/ngsw-worker.js",
     "getJaSVGs": "npx copyfiles -f \"../animCJK/svgsJa/*\" src/assets/jaSVGs && npx copyfiles -f \"../animCJK/svgsJaSpecial/*\" src/assets/jaSVGs && npx copyfiles -f \"../animCJK/svgsKana/*\" src/assets/jaSVGs"
   },
   "private": true,
