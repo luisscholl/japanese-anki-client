@@ -4,12 +4,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
-    "build": "npm run makeLineEndingsConsistent && ng build --prod --base-href /japanese-anki-client/client/dist/client/ && npm run generateAttributions",
+    "build": "npm run makeLineEndingsConsistent && npm run generateAttributions && ng build --prod --base-href /japanese-anki-client/client/dist/client/",
     "install": "npm run getJaSVGs",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2ea",
-    "generateAttributions": "npx oss-attribution-generator && mv oss-attribution/attribution.txt ../licenses/npm-licenses.txt && rm -r oss-attribution",
+    "generateAttributions": "npx oss-attribution-generator && npx move-file-cli oss-attribution/attribution.txt ../licenses/npm-licenses.txt && npx rimraf oss-attribution",
     "getJaSVGs": "npx copyfiles -f \"../animCJK/svgsJa/*\" src/assets/jaSVGs && npx copyfiles -f \"../animCJK/svgsJaSpecial/*\" src/assets/jaSVGs && npx copyfiles -f \"../animCJK/svgsKana/*\" src/assets/jaSVGs",
     "makeLineEndingsConsistent": "sfk remcr -dir . -yes"
   },
