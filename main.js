@@ -3,7 +3,6 @@ const path = require('path');
 const express = require('express');
 const compression = require('compression');
 
-require('./db').getDb();
 const noteRouter = require('./api/note');
 
 const _port = 80;

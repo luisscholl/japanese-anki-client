@@ -42,24 +42,14 @@ export class ManageComponent implements OnInit {
     } catch (err) {
       return;
     }
-    this.notes.search({
-      $or: [
-        { japanese: query },
-        { native: query },
-        { japanesePronunciation: query }
-    ]}).then(resolved => {
+    this.notes.search(query).then(resolved => {
       this._notes = resolved;
     });
   }
 
   addNewCard() {
     this.newNote = null;
-    this.notes.search({
-      $or: [
-        { japanese: /_New Note_/ },
-        { native: /_New Note_/ },
-        { japanesePronunciation: /_New Note_/ }
-    ]})
+    this.notes.search('_New Note_')
     .then(resolved => {
       this.searchInput = '_New Note_';
       this.lastSearchString = '_New Note_';
@@ -67,6 +57,7 @@ export class ManageComponent implements OnInit {
         this._notes = null;
         this.newNote = resolved[0];
       } else {
+        console.log('1');
         this.notes.newNote('_New Note_', '_New Note_')
         .then(resolved => {
           this._notes = [];
@@ -79,7 +70,7 @@ export class ManageComponent implements OnInit {
   resetSearch() {
     this.searchInput = '';
     this.newNote = null;
-    this.notes.search({}).then(resolved => {
+    this.notes.search().then(resolved => {
       this._notes = resolved;
     });
   }
@@ -88,6 +79,9 @@ export class ManageComponent implements OnInit {
     if (this.lastSearchString === '_New Note_') {
       this.searchInput = '';
     }
+    this.notes.search().then(resolved => {
+      this._notes = resolved;
+    });
   }
 
 }

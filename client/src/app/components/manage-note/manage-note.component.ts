@@ -46,19 +46,19 @@ export class ManageNoteComponent implements OnInit {
     this.delete.emit();
   }
 
-  updateJapanese(e: InputEvent) {
+  async updateJapanese(e: InputEvent) {
     this.note.japanese = (e.target as HTMLInputElement).value.trim();
-    this.notes.update(this.note);
+    this.note = await this.notes.update(this.note);
   }
 
-  updateJapanesePronunciation(e: InputEvent) {
+  async updateJapanesePronunciation(e: InputEvent) {
     this.note.japanesePronunciation = (e.target as HTMLInputElement).value.trim();
-    this.notes.update(this.note);
+    this.note = await this.notes.update(this.note);
   }
 
-  updateNative(e: InputEvent) {
+  async updateNative(e: InputEvent) {
     this.note.native = (e.target as HTMLInputElement).value.trim();
-    this.notes.update(this.note);
+    this.note = await this.notes.update(this.note);
   }
 
 }

@@ -1,4 +1,5 @@
 export class Card {
+  noteId: string;
   type: "new-card" | "native-japanese-writing" | "japanese-native-recall";
   japanese: string;
   japanesePronunciation?: string;
@@ -8,7 +9,7 @@ export class Card {
   ease: number;
   reviews: number;
   lastIntervalInMillis: number;
-  lastReview: Date;
-  scheduledReview: Date;
+  lastReview: string;
+  scheduledReview: string;
   tags: string[];
 }

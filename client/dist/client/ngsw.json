@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1618175787937,
+  "timestamp": 1619719161644,
   "index": "/japanese-anki-client/client/dist/client/index.html",
   "assetGroups": [
     {
@@ -13,11 +13,11 @@
       "urls": [
         "/japanese-anki-client/client/dist/client/favicon.ico",
         "/japanese-anki-client/client/dist/client/index.html",
-        "/japanese-anki-client/client/dist/client/main-es2018.f5f5c3a52d2d38204217.js",
-        "/japanese-anki-client/client/dist/client/main-es5.f5f5c3a52d2d38204217.js",
+        "/japanese-anki-client/client/dist/client/main-es2018.60aaf597c926aa50bf8a.js",
+        "/japanese-anki-client/client/dist/client/main-es5.60aaf597c926aa50bf8a.js",
         "/japanese-anki-client/client/dist/client/manifest.webmanifest",
-        "/japanese-anki-client/client/dist/client/polyfills-es2018.22cee0bcdfecc086b49c.js",
-        "/japanese-anki-client/client/dist/client/polyfills-es5.5d54f5aa4a7bbaf71d1c.js",
+        "/japanese-anki-client/client/dist/client/polyfills-es2018.fc4dc81a921ad1a73386.js",
+        "/japanese-anki-client/client/dist/client/polyfills-es5.8664676bca813eb14780.js",
         "/japanese-anki-client/client/dist/client/runtime-es2018.a4dadbc03350107420a4.js",
         "/japanese-anki-client/client/dist/client/runtime-es5.a4dadbc03350107420a4.js",
         "/japanese-anki-client/client/dist/client/styles.58f5741f6a3923ea9d3c.css"
@@ -6419,12 +6419,12 @@
     "/japanese-anki-client/client/dist/client/assets/jaSVGs/64104.svg": "77e5ba376537f3cfd821de42599b9813902d02bd",
     "/japanese-anki-client/client/dist/client/assets/jaSVGs/64105.svg": "2b93f050da6733a9a0e6cd2c445a828085a107db",
     "/japanese-anki-client/client/dist/client/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/japanese-anki-client/client/dist/client/index.html": "f8019ce04df41f7d74da226df9fab057b5a2ab66",
-    "/japanese-anki-client/client/dist/client/main-es2018.f5f5c3a52d2d38204217.js": "f310ac8e2f814d785c49ceb41c43165aae28628e",
-    "/japanese-anki-client/client/dist/client/main-es5.f5f5c3a52d2d38204217.js": "c23e3749347c2e64b9b6f3edd964f02602ee4bf4",
+    "/japanese-anki-client/client/dist/client/index.html": "9cd667a77f7ca0e80eb9495f92b162f9e0a1273d",
+    "/japanese-anki-client/client/dist/client/main-es2018.60aaf597c926aa50bf8a.js": "f7ce6eeebe3526252de4ab2c9fd8ce71c33a5521",
+    "/japanese-anki-client/client/dist/client/main-es5.60aaf597c926aa50bf8a.js": "a207aac1f80cda7bc0f2a20adc2237f4587c01ff",
     "/japanese-anki-client/client/dist/client/manifest.webmanifest": "e8c5d6b2b0f26efcb216099dcc0e7685647dacb8",
-    "/japanese-anki-client/client/dist/client/polyfills-es2018.22cee0bcdfecc086b49c.js": "266a789b05d5851b878828adc1d5c67a6bc1819a",
-    "/japanese-anki-client/client/dist/client/polyfills-es5.5d54f5aa4a7bbaf71d1c.js": "b86f4fa97f2dbc93f880495214f05badcf144c63",
+    "/japanese-anki-client/client/dist/client/polyfills-es2018.fc4dc81a921ad1a73386.js": "c09945ad7620dde03d15f7de3feb3c341db25f78",
+    "/japanese-anki-client/client/dist/client/polyfills-es5.8664676bca813eb14780.js": "61f706278ef2b5ce674537541f84079b98316cf4",
     "/japanese-anki-client/client/dist/client/runtime-es2018.a4dadbc03350107420a4.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
     "/japanese-anki-client/client/dist/client/runtime-es5.a4dadbc03350107420a4.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
     "/japanese-anki-client/client/dist/client/styles.58f5741f6a3923ea9d3c.css": "958bc918232ad35947bb52230da44789ce6ea7b7"

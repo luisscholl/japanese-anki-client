@@ -2,15 +2,15 @@ import { Injectable } from "@angular/core";
 import { CardStatus, Note } from "../models/note.model";
 import { SettingsService } from "./settings.service";
 import { HttpClient } from "@angular/common/http";
-import { Observable, Subscription } from "rxjs";
-import * as Datastore from "../../../../nedb/browser-version/out/nedb.min";
+import { Observable, Subscription, throwError } from "rxjs";
 import { Card } from "../models/card.model";
 import { rejects } from "assert";
 import { environment } from "src/environments/environment";
-import { not } from "@angular/compiler/src/output/output_ast";
 import { StatisticsService } from "./statistics.service";
 import { TagService } from "./tag.service";
 import { resolve } from "dns";
+import * as PouchDB from 'pouchdb/dist/pouchdb';
+import * as PouchDBFind from 'pouchdb-find';
 
 @Injectable({
   providedIn: "root",
@@ -21,32 +21,30 @@ export class NoteService {
     japanese: undefined,
     japanesePronunciation: undefined,
     native: undefined,
-    cardStatus: {
-      "new-card": {
+    cardStatus: [
+      {
+        type: 'new-card',
         lastIntervalInMillis: 0,
-        lastReview: new Date(0),
-        scheduledReview: new Date(0),
+        lastReview: '-271821-04-21Z',
+        scheduledReview: '-271821-04-21Z',
         stage: 'new',
         lapses: 0,
         ease: 0,
         reviews: 0
-      },
-    },
-    lastUpdate: undefined,
-    update: "create",
+      }],
     tags: []
   };
   cardTypes = ["native-japanese-writing", "japanese-native-recall"];
   db;
   currentlyReviewed: {
     card: Card,
-    noteId: string;
+    note: Note;
   }
   queues: {
-    new: { card: Card, noteId: string }[],
-    learn: { card: Card, noteId: string }[],
-    review: { card: Card, noteId: string }[],
-    relearn: { card: Card, noteId: string }[]
+    new: { card: Card }[],
+    learn: { card: Card }[],
+    review: { card: Card }[],
+    relearn: { card: Card }[]
   } = {
       new: [],
       learn: [],
@@ -54,52 +52,27 @@ export class NoteService {
       relearn: []
     }
   // values from settings service not initialized here as they could change during the existence of the note service
-  initialLearnCardStatus: {
-    "native-japanese-writing": CardStatus;
-    "japanese-native-recall": CardStatus;
-  } = {
-      "native-japanese-writing": {
-        lastIntervalInMillis: 0,
-        lastReview: new Date(0),
-        scheduledReview: new Date(0),
-        stage: 'learn',
-        lapses: 0,
-        ease: 0,
-        reviews: 1
-      },
-      "japanese-native-recall": {
-        lastIntervalInMillis: 0,
-        lastReview: new Date(0),
-        scheduledReview: new Date(0),
-        stage: 'learn',
-        lapses: 0,
-        ease: 0,
-        reviews: 1
-      },
-    };
-  initialReviewCardStatus: {
-    "native-japanese-writing": CardStatus;
-    "japanese-native-recall": CardStatus;
-  } = {
-      "native-japanese-writing": {
-        lastIntervalInMillis: 0,
-        lastReview: new Date(0),
-        scheduledReview: new Date(0),
-        stage: 'review',
-        lapses: 0,
-        ease: 0,
-        reviews: 0
-      },
-      "japanese-native-recall": {
-        lastIntervalInMillis: 0,
-        lastReview: new Date(0),
-        scheduledReview: new Date(0),
-        stage: 'review',
-        lapses: 0,
-        ease: 0,
-        reviews: 0
-      },
-    };
+  initialLearnCardStatus: CardStatus[] =
+    [{
+      type: "native-japanese-writing",
+      lastIntervalInMillis: 0,
+      lastReview: '-271821-04-21Z',
+      scheduledReview: '-271821-04-21Z',
+      stage: 'learn',
+      lapses: 0,
+      ease: 0,
+      reviews: 1
+    }, {
+      type: "japanese-native-recall",
+      lastIntervalInMillis: 0,
+      lastReview: '-271821-04-21Z',
+      scheduledReview: '-271821-04-21Z',
+      stage: 'learn',
+      lapses: 0,
+      ease: 0,
+      reviews: 1
+    }];
+  initialReviewCardStatus = this.initialLearnCardStatus;
 
   constructor(
     private http: HttpClient,
@@ -107,16 +80,19 @@ export class NoteService {
     private statistics: StatisticsService,
     private tag: TagService
   ) {
-    this.db = new Datastore({ filename: "notes.db", autoload: true });
-    this.db.ensureIndex({ fieldName: "japanese" }, (err) => {
-      if (err) console.log(err);
+    PouchDB.plugin((PouchDBFind as any).default);
+    this.db = new PouchDB('villosum_db', { auto_compaction: true });
+    this.db.createIndex({
+      index: {
+        fields: ['japanese', 'japanesePronunciation', 'native']
+      }
+    }).catch(err => {
+      console.error(err);
     });
-    this.db.ensureIndex({ fieldName: "native" }, (err) => {
-      if (err) console.log(err);
-    });
-    this.db.ensureIndex({ fieldName: "japanesePronunciation" }, (err) => {
-      if (err) console.log(err);
-    });
+  }
+
+  init() {
+
   }
 
   newNote(
@@ -126,6 +102,7 @@ export class NoteService {
   ): Promise<Note> {
     return this._newNote(
       Object.assign(this.defaultNote, {
+        _id: new Date().toJSON(),
         japanese: japanese,
         native: native,
         japanesePronunciation: japanesePronunciation,
@@ -135,14 +112,14 @@ export class NoteService {
   }
 
   _newNote(note: Note): Promise<Note> {
-    return new Promise((resolve, reject) => {
-      this.db.insert(note, (err, newDoc) => {
-        if (err) {
-          console.log(err);
-          reject(err);
-        }
-        resolve(newDoc);
-      });
+    if (note._rev) delete note._rev;
+    return this.db.put(note).then(delta => {
+      note._id = delta.id;
+      note._rev = delta.rev;
+      return note;
+    }).catch(err => {
+      console.error(err);
+      throwError(err);
     });
   }
 
@@ -150,104 +127,102 @@ export class NoteService {
     return new Promise((resolve, reject) => {
       this.db.find(
         {
-          $and: [query, { $not: { update: "delete" } }],
+          selector:
+          {
+            $or: [
+              { japanese: { $regex: query } },
+              { japanesePronunciation: { $regex: query } },
+              { native: { $regex: query } }
+            ]
+          }
         },
-        (err, docs) => {
+        (err, response) => {
           if (err) {
-            console.log(err);
+            console.error(err);
             reject(err);
           }
-          resolve(docs);
+          resolve(response.docs);
         }
       );
     });
   }
 
   delete(note: Note) {
-    note.lastUpdate = new Date();
-    note.update = "delete";
-    this.db.update({ _id: note._id }, note);
+    this.db.remove(note);
   }
 
-  update(note: Note) {
-    note.lastUpdate = new Date();
-    note.update = "update";
-    this.db.update({ _id: note._id }, note);
+  update(note: Note): Promise<Note> {
+    return this.db.put(note)
+      .then(result => {
+        note._rev = result.rev;
+        return note;
+      })
+      .catch(err => console.error(err));
   }
 
-  async getNextCardOfStage(stage: "new" | "learn" | "review" | "relearn"): Promise<{ card: Card, noteId: string }> {
-    return new Promise((resolve, reject) => {
-      let now = new Date(Date.now() + environment.reviewLookAheadInMinutes * 60 * 1000);
-      this.db.find(
-        {
-          $where: function () {
-            if (this.update === 'delete') return false;
-            for (let cardStatus of Object.values(
-              this.cardStatus
-            ) as CardStatus[]) {
-              if (cardStatus.scheduledReview <= now && cardStatus.stage === stage) return true;
-            }
-            return false;
-          },
-        },
-        (err, notes: Note[]) => {
-          if (err) {
-            console.log(err);
-            reject(err);
-          } else {
-            let forReview: { card: Card, noteId: string }[] = [];
-            for (let note of notes) {
-              for (let cardStatus of Object.entries(note.cardStatus)) {
-                if (cardStatus[1].scheduledReview <= now) {
-                  forReview.push({
-                    card: {
-                      type: cardStatus[0] as any,
-                      japanese: note.japanese,
-                      japanesePronunciation: note.japanesePronunciation,
-                      native: note.native,
-                      stage: cardStatus[1].stage,
-                      lapses: cardStatus[1].lapses,
-                      ease: cardStatus[1].ease,
-                      reviews: cardStatus[1].reviews,
-                      lastIntervalInMillis: cardStatus[1].lastIntervalInMillis,
-                      lastReview: cardStatus[1].lastReview,
-                      scheduledReview: cardStatus[1].scheduledReview,
-                      tags: (note.tags || []).concat(cardStatus[0])
-                    },
-                    noteId: note._id,
-                  });
-                }
-              }
-            }
-            forReview = forReview.sort(
-              (a, b) => a.card.scheduledReview.getTime() - b.card.scheduledReview.getTime()
-            );
-            resolve((forReview.length > 0 && forReview[0].card.scheduledReview <= new Date(Date.now())) ? forReview[0] : null);
+  async getNextCardOfStage(stage: "new" | "learn" | "review" | "relearn"): Promise<{ card: Card, note: Note }> {
+    let now = new Date(Date.now() + environment.reviewLookAheadInMinutes * 60 * 1000).toJSON();
+    return this.db.find({
+      selector: {
+        // sadly, PouchDB only supports simple selectors on $elemMatch
+        //$and: [
+        //  {
+        //    cardStatus: {
+        //      $elemMatch: {
+        //        scheduledReview: {
+        //          $gte: now
+        //        }
+        //      }
+        //    }
+        //  },
+        //  {
+        cardStatus: {
+          $elemMatch: {
+            stage: stage
           }
         }
-      );
+        //  }
+        //]
+      }
+    }).then(result => {
+      let forReview: { card: Card, note: Note }[] = [];
+      for (let note of result.docs) {
+        for (let status of note.cardStatus) {
+          if (status.scheduledReview < now) {
+            forReview.push({
+              card: Object.assign(status, {
+                noteId: note._id,
+                japanese: note.japanese,
+                japanesePronunciation: note.japanesePronunciation,
+                native: note.native,
+                tags: (note.tags || []).concat(status.type)
+              }),
+              note: note
+            });
+          }
+        }
+      }
+      forReview.sort((a, b) => Date.parse(a.card.scheduledReview) - Date.parse(b.card.scheduledReview))
+      return forReview.length > 0 ? forReview[0] : null;
+    }).catch(err => {
+      console.error(err);
     });
   }
 
-  async updateCardInDB(card: Card, noteId: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      card.scheduledReview = new Date(card.scheduledReview.getTime() + Math.ceil(this.settings.getSchedulingDeviationInMillis() * (Math.random() * 2 - 1)));
-      card.reviews++;
-      this.db.update(
-        { _id: noteId },
-        { $set: { [`cardStatus.${card.type}`]: this.getCardStatusFromCard(card) } },
-        (err) => {
-          if (err) {
-            console.log(err);
-            reject(err);
-          }
-          resolve();
-        }
-      );
+  async updateCardInDB(card: Card, note: Note): Promise<void> {
+    card.scheduledReview = (new Date(Date.parse(card.scheduledReview) + Math.ceil(this.settings.getSchedulingDeviationInMillis() * (Math.random() * 2 - 1)))).toJSON();
+    card.reviews++;
+    let i = note.cardStatus.findIndex(status => status.type === card.type);
+    note.cardStatus[i] = this.getCardStatusFromCard(card);
+    return this.db.put(note).then(() => {
+      return;
+    }).catch(err => {
+      console.error(err);
     });
   }
 
-  async updateCurrentlyReviewed(): Promise<{ card: Card, noteId: string }> {
+  // todo: potential to optimize speed by getting the first card of each stage in one swoop
+  async updateCurrentlyReviewed(): Promise<{ card: Card, note: Note }> {
     for (let stage of ["relearn", "learn", "review", "new"]) {
       this.currentlyReviewed = await this.getNextCardOfStage(stage as any);
       if (this.currentlyReviewed) return this.currentlyReviewed;
@@ -260,54 +235,43 @@ export class NoteService {
   }
 
   async scheduleCurrentCardAndGetNext(quality: 'fail' | 'hard' | 'good' | 'easy'): Promise<Card> {
-    let DBWriteStatus: Promise<void>;
+    let dbWriteStatus: Promise<void>;
     switch (this.currentlyReviewed.card.stage) {
       case "new":
-        DBWriteStatus = this.scheduleCurrentCardNew();
+        dbWriteStatus = this.scheduleCurrentCardNew();
         break;
       case "learn":
       case "relearn":
-        DBWriteStatus = this.scheduleCurrentCardLearnRelearn(quality as 'fail' | 'good');
+        dbWriteStatus = this.scheduleCurrentCardLearnRelearn(quality as 'fail' | 'good');
         break;
       case "review":
-        DBWriteStatus = this.scheduleCurrentCardReview(quality);
+        dbWriteStatus = this.scheduleCurrentCardReview(quality);
         break;
     }
-    return DBWriteStatus
+    return dbWriteStatus
       .then(() => {
         return this.updateCurrentlyReviewed().then(forReview => forReview && forReview.card);
       });
   }
 
   async scheduleCurrentCardNew(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      let initialLearnCardStatus = this.initialLearnCardStatus;
-      for (let type of ["japanese-native-recall", "native-japanese-writing"]) {
-        initialLearnCardStatus[type].scheduledReview = new Date(
-          Date.now() +
-          this.settings.getLearningPhaseIntervalInMillis(0) +
-          this.settings.getSchedulingDeviationInMillis() * (Math.random() * 2 - 1)
-        );
-        initialLearnCardStatus[type].lastIntervalInMillis = this.settings.getLearningPhaseIntervalInMillis(0);
-      }
-      this.db.update(
-        { _id: this.currentlyReviewed.noteId },
-        {
-          $set: {
-            cardStatus: initialLearnCardStatus,
-            update: "review",
-            stage: "learn"
-          }
-        },
-        err => {
-          if (err) {
-            console.error(err);
-            reject(err);
-          }
-          resolve();
-        }
-      );
-    });
+    let status = this.initialLearnCardStatus;
+    for (let i = 0; i < status.length; i++) {
+      status[i].scheduledReview = new Date(
+        Date.now() +
+        this.settings.getLearningPhaseIntervalInMillis(0) +
+        this.settings.getSchedulingDeviationInMillis() * (Math.random() * 2 - 1)
+      ).toJSON();
+      status[i].lastIntervalInMillis = this.settings.getLearningPhaseIntervalInMillis(0);
+    }
+    this.currentlyReviewed.note.cardStatus = status;
+    return this.db.put(this.currentlyReviewed.note)
+      .then(response => {
+        return;
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 
   async scheduleCurrentCardLearnRelearn(succeeded: 'fail' | 'good'): Promise<void> {
@@ -326,7 +290,7 @@ export class NoteService {
     } else {
       interval = this.settings.getRelearningPhaseIntervalInMillis(this.currentlyReviewed.card.ease);
     }
-    this.currentlyReviewed.card.lastReview = new Date();
+    this.currentlyReviewed.card.lastReview = new Date().toJSON();
     if (interval === -1) {
       // promote card
       if (this.currentlyReviewed.card.stage === 'learn') {
@@ -339,11 +303,11 @@ export class NoteService {
       this.currentlyReviewed.card.stage = "review";
     }
     if (this.currentlyReviewed.card.stage === 'learn' || this.currentlyReviewed.card.stage === 'relearn') {
-      this.currentlyReviewed.card.scheduledReview = new Date(Date.now() + interval);
+      this.currentlyReviewed.card.scheduledReview = new Date(Date.now() + interval).toJSON();
     } else {
-      this.currentlyReviewed.card.scheduledReview = new Date(Date.now() + this.currentlyReviewed.card.lastIntervalInMillis);
+      this.currentlyReviewed.card.scheduledReview = new Date(Date.now() + this.currentlyReviewed.card.lastIntervalInMillis).toJSON();
     }
-    return this.updateCardInDB(this.currentlyReviewed.card, this.currentlyReviewed.noteId);
+    return this.updateCardInDB(this.currentlyReviewed.card, this.currentlyReviewed.note);
   }
 
   async scheduleCurrentCardReview(quality: 'fail' | 'hard' | 'good' | 'easy'): Promise<void> {
@@ -352,8 +316,8 @@ export class NoteService {
         this.currentlyReviewed.card.stage = "relearn";
         this.currentlyReviewed.card.ease = Math.max(this.settings.getMinEase(), this.currentlyReviewed.card.ease + this.settings.getFailEaseModifier());
         this.currentlyReviewed.card.lapses++;
-        this.currentlyReviewed.card.scheduledReview = new Date(Date.now() + this.settings.getRelearningPhaseIntervalInMillis(0));
-        this.updateCardInDB(this.currentlyReviewed.card, this.currentlyReviewed.noteId);
+        this.currentlyReviewed.card.scheduledReview = new Date(Date.now() + this.settings.getRelearningPhaseIntervalInMillis(0)).toJSON();
+        this.updateCardInDB(this.currentlyReviewed.card, this.currentlyReviewed.note);
         return;
 
       case 'hard':
@@ -371,12 +335,13 @@ export class NoteService {
         this.currentlyReviewed.card.ease = Math.max(this.settings.getMinEase(), this.currentlyReviewed.card.ease + this.settings.getEasyEaseModifier());
         break;
     }
-    this.currentlyReviewed.card.scheduledReview = new Date(Date.now() + this.currentlyReviewed.card.lastIntervalInMillis);
-    return this.updateCardInDB(this.currentlyReviewed.card, this.currentlyReviewed.noteId);
+    this.currentlyReviewed.card.scheduledReview = new Date(Date.now() + this.currentlyReviewed.card.lastIntervalInMillis).toJSON();
+    return this.updateCardInDB(this.currentlyReviewed.card, this.currentlyReviewed.note);
   }
 
   getCardStatusFromCard(card: Card): CardStatus {
     return {
+      type: card.type,
       lastIntervalInMillis: card.lastIntervalInMillis,
       lastReview: card.lastReview,
       scheduledReview: card.scheduledReview,
