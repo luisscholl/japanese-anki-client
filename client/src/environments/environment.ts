@@ -4,8 +4,9 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:4200',
-  apiBaseUrl: 'http://localhost',
+  baseUrl: 'http://localhost:4200/',
+  apiBaseUrl: 'http://localhost/',
+  dbBaseUrl: 'http://localhost:5984/',
   learningPhaseIntervalsInMinutes: [15, 24 * 60, 6 * 24 * 60],
   relearningPhaseIntervalsInMinutes: [20],
   graduatingIntervalInDays: 15,
@@ -22,7 +23,8 @@ export const environment = {
   relearnPassedIntervalModifier: 0.7,
   minRelearnPassedIntervalInDays: 2,
   leechThreshold: 8,
-  reviewLookAheadInMinutes: 5
+  reviewLookAheadInMinutes: 5,
+  roomName: 'villosum-room-1'
 };
 
 /*

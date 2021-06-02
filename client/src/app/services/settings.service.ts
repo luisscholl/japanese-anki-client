@@ -11,6 +11,7 @@ import { environment } from "src/environments/environment";
 })
 export class SettingsService {
   private apiBaseUrl: BehaviorSubject<string>;
+  private dbBaseUrl: BehaviorSubject<string>;
   private learningPhaseIntervalsInMillis: BehaviorSubject<number[]>;
   private learningPhaseIntervalsInMinutes: BehaviorSubject<number[]>;
   private relearningPhaseIntervalsInMillis: BehaviorSubject<number[]>;
@@ -33,6 +34,7 @@ export class SettingsService {
 
   constructor(private storage: StorageMap) {
     this.apiBaseUrl = new BehaviorSubject<string>(environment.apiBaseUrl);
+    this.dbBaseUrl = new BehaviorSubject<string>(environment.dbBaseUrl);
     this.learningPhaseIntervalsInMillis = new BehaviorSubject<number[]>(environment.learningPhaseIntervalsInMinutes.map(e => e * 60 * 1000));
     this.learningPhaseIntervalsInMinutes = new BehaviorSubject<number[]>(environment.learningPhaseIntervalsInMinutes);
     this.relearningPhaseIntervalsInMillis = new BehaviorSubject<number[]>(environment.relearningPhaseIntervalsInMinutes.map(e => e * 60 * 1000));
@@ -56,6 +58,12 @@ export class SettingsService {
       next: apiBaseUrl => {
         if (!apiBaseUrl) return;
         this.apiBaseUrl.next(apiBaseUrl);
+      }
+    });
+    this.storage.get("dbBaseUrl", { type: "string" }).subscribe({
+      next: dbBaseUrl => {
+        if (!dbBaseUrl) return;
+        this.dbBaseUrl.next(dbBaseUrl);
       }
     });
     this.storage.get("learningPhaseIntervalsInMinutes", { type: "array", items: { type: "number" } }).subscribe({
@@ -157,6 +165,14 @@ export class SettingsService {
     this.apiBaseUrl.next(host);
     this.storage.set("apiBaseUrl", host, { type: "string" }).subscribe();
   }
+
+  getDbBaseUrl(): string {
+    return this.dbBaseUrl.value;
+  }
+
+  setDbBaseUrl(host: string): void {
+    this.dbBaseUrl.next(host);
+    this.storage.set("dbBaseUrl", host, { type: "string" }).subscribe();
 
   getLearningPhaseIntervalInMillis(n: number): number {
     return this.learningPhaseIntervalsInMillis.value[n] || -1;

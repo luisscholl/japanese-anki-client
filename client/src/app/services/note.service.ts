@@ -11,6 +11,7 @@ import { TagService } from "./tag.service";
 import { resolve } from "dns";
 import * as PouchDB from 'pouchdb/dist/pouchdb';
 import * as PouchDBFind from 'pouchdb-find';
+import * as PouchDBAuthentication from 'pouchdb-authentication';
 
 @Injectable({
   providedIn: "root",
@@ -35,7 +36,9 @@ export class NoteService {
     tags: []
   };
   cardTypes = ["native-japanese-writing", "japanese-native-recall"];
-  db;
+  remoteDb;
+  localDb;
+  replicator;
   currentlyReviewed: {
     card: Card,
     note: Note;
@@ -81,8 +84,11 @@ export class NoteService {
     private tag: TagService
   ) {
     PouchDB.plugin((PouchDBFind as any).default);
-    this.db = new PouchDB('villosum_db', { auto_compaction: true });
-    this.db.createIndex({
+    PouchDB.plugin((PouchDBAuthentication as any).default);
+    // todo
+    this.remoteDb = new PouchDB(`${this.settings.getDbBaseUrl()}userdb-${hexEncode('luis')}`);
+    this.localDb = new PouchDB('villosum_db', { auto_compaction: true });
+    this.localDb.createIndex({
       index: {
         fields: ['japanese', 'japanesePronunciation', 'native']
       }
@@ -113,7 +119,7 @@ export class NoteService {
 
   _newNote(note: Note): Promise<Note> {
     if (note._rev) delete note._rev;
-    return this.db.put(note).then(delta => {
+    return this.localDb.put(note).then(delta => {
       note._id = delta.id;
       note._rev = delta.rev;
       return note;
@@ -125,7 +131,7 @@ export class NoteService {
 
   search(query: any = new RegExp("")): Promise<Note[]> {
     return new Promise((resolve, reject) => {
-      this.db.find(
+      this.localDb.find(
         {
           selector:
           {
@@ -148,11 +154,11 @@ export class NoteService {
   }
 
   delete(note: Note) {
-    this.db.remove(note);
+    this.localDb.remove(note);
   }
 
   update(note: Note): Promise<Note> {
-    return this.db.put(note)
+    return this.localDb.put(note)
       .then(result => {
         note._rev = result.rev;
         return note;
@@ -162,7 +168,7 @@ export class NoteService {
 
   async getNextCardOfStage(stage: "new" | "learn" | "review" | "relearn"): Promise<{ card: Card, note: Note }> {
     let now = new Date(Date.now() + environment.reviewLookAheadInMinutes * 60 * 1000).toJSON();
-    return this.db.find({
+    return this.localDb.find({
       selector: {
         // sadly, PouchDB only supports simple selectors on $elemMatch
         //$and: [
@@ -214,7 +220,7 @@ export class NoteService {
     card.reviews++;
     let i = note.cardStatus.findIndex(status => status.type === card.type);
     note.cardStatus[i] = this.getCardStatusFromCard(card);
-    return this.db.put(note).then(() => {
+    return this.localDb.put(note).then(() => {
       return;
     }).catch(err => {
       console.error(err);
@@ -265,7 +271,7 @@ export class NoteService {
       status[i].lastIntervalInMillis = this.settings.getLearningPhaseIntervalInMillis(0);
     }
     this.currentlyReviewed.note.cardStatus = status;
-    return this.db.put(this.currentlyReviewed.note)
+    return this.localDb.put(this.currentlyReviewed.note)
       .then(response => {
         return;
       })
