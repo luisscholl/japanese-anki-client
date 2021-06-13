@@ -2,8 +2,8 @@ const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const express = require('express');
 const compression = require('compression');
-
-const noteRouter = require('./api/note');
+const PouchDB = require('pouchdb');
+const PersistentPouchDB = PouchDB.defaults({prefix: './db'});
 
 const _port = 80;
 const _client_folder = '/client/dist/client';
@@ -14,7 +14,7 @@ api.use(compression());
 api.use(express.json());
 
 // Serve API
-api.use('/api/v1/note', noteRouter);
+api.use('/api/v1/db', require('express-pouchdb')(PersistentPouchDB));
 
 // Serve static files
 api.get('*.*', express.static(__dirname + _client_folder, { maxAge: '10y' }));

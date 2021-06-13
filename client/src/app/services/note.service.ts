@@ -12,6 +12,7 @@ import { resolve } from "dns";
 import * as PouchDB from 'pouchdb/dist/pouchdb';
 import * as PouchDBFind from 'pouchdb-find';
 import * as PouchDBAuthentication from 'pouchdb-authentication';
+import { hexEncode } from '../utility';
 
 @Injectable({
   providedIn: "root",
@@ -86,8 +87,13 @@ export class NoteService {
     PouchDB.plugin((PouchDBFind as any).default);
     PouchDB.plugin((PouchDBAuthentication as any).default);
     // todo
-    this.remoteDb = new PouchDB(`${this.settings.getDbBaseUrl()}userdb-${hexEncode('luis')}`);
+    this.remoteDb = new PouchDB(`${this.settings.getDbBaseUrl()}userdb-${hexEncode('luis')}`, { skip_setup: true, auth: { username: 'luis', password: 'a' } });
     this.localDb = new PouchDB('villosum_db', { auto_compaction: true });
+    this.remoteDb.login('luis', 'a').then(docs => {
+      if (docs.ok) console.log('Logged in.');
+      else console.log('Something went wrong during login.');
+      this.localDb.sync(this.remoteDb, { live: true, retry: true }).on('error', console.error.bind(console));
+    });
     this.localDb.createIndex({
       index: {
         fields: ['japanese', 'japanesePronunciation', 'native']

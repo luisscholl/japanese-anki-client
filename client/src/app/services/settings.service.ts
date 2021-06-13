@@ -173,6 +173,7 @@ export class SettingsService {
   setDbBaseUrl(host: string): void {
     this.dbBaseUrl.next(host);
     this.storage.set("dbBaseUrl", host, { type: "string" }).subscribe();
+  }
 
   getLearningPhaseIntervalInMillis(n: number): number {
     return this.learningPhaseIntervalsInMillis.value[n] || -1;
