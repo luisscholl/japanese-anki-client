@@ -15,6 +15,10 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  userChange(e: InputEvent) {
+    this.settings.setUser((e.target as HTMLInputElement).value);
+  }
+
   learningPhaseIntervalsInMinutesChange(e: InputEvent) {
     let intervals: number[] = (e.target as HTMLInputElement).value.replace(/ /g, '').split(',').map(e => parseInt(e));
     if (!intervals.includes(NaN)) this.settings.setLearningPhaseIntervalsInMinutes(intervals);

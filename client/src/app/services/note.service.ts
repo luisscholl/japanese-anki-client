@@ -9,9 +9,8 @@ import { environment } from "src/environments/environment";
 import { StatisticsService } from "./statistics.service";
 import { TagService } from "./tag.service";
 import { resolve } from "dns";
-import * as PouchDB from 'pouchdb/dist/pouchdb';
+const PouchDB = require('pouchdb').default;
 import * as PouchDBFind from 'pouchdb-find';
-import * as PouchDBAuthentication from 'pouchdb-authentication';
 import { hexEncode } from '../utility';
 
 @Injectable({
@@ -85,15 +84,11 @@ export class NoteService {
     private tag: TagService
   ) {
     PouchDB.plugin((PouchDBFind as any).default);
-    PouchDB.plugin((PouchDBAuthentication as any).default);
-    // todo
-    this.remoteDb = new PouchDB(`${this.settings.getDbBaseUrl()}userdb-${hexEncode('luis')}`, { skip_setup: true, auth: { username: 'luis', password: 'a' } });
     this.localDb = new PouchDB('villosum_db', { auto_compaction: true });
-    this.remoteDb.login('luis', 'a').then(docs => {
-      if (docs.ok) console.log('Logged in.');
-      else console.log('Something went wrong during login.');
+    if (this.settings.getUser()) {
+      this.remoteDb = new PouchDB(`${this.settings.getApiBaseUrl()}v1/db/${this.settings.getUser()}`);
       this.localDb.sync(this.remoteDb, { live: true, retry: true }).on('error', console.error.bind(console));
-    });
+    }
     this.localDb.createIndex({
       index: {
         fields: ['japanese', 'japanesePronunciation', 'native']

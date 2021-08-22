@@ -5,12 +5,11 @@
   "description": "My Electron application description",
   "main": "main.js",
   "scripts": {
-    "start": "concurrently -n FrontEnd,Chimera \"cd client && npm start\" \"electron-forge start\"",
-    "package": "electron-forge package",
-    "make": "cd client && npm run build && cd .. && electron-forge make",
-    "publish": "electron-forge publish",
+    "start": "concurrently -n Backend,Frontend \"nodemon main.js --config nodemon.json\" \"cd client && npm start\"",
+    "make": "cd client && npm run build && cd .. && nexe main.js -r client/dist/client --build",
     "lint": "echo \"No linting configured\"",
-    "install": "git submodule update --init --recursive && npm i -g concurrently && npm i -g @angular/cli && cd client && npm install && cd .."
+    "install": "git submodule update --init --recursive && npm i -g concurrently && npm i -g @angular/cli && cd client && npm install && cd ..",
+    "postinstall": ".\\node_modules\\.bin\\electron-rebuild.cmd"
   },
   "keywords": [],
   "author": {
@@ -18,57 +17,21 @@
     "email": "ssh@luisscholl.de"
   },
   "license": "UNLICENSED",
-  "config": {
-    "forge": {
-      "packagerConfig": {
-        "asar": true
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "Villosum"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ],
-          "config": {
-            "name": "Villosum"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {
-            "name": "Villosum"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {
-            "name": "Villosum"
-          }
-        }
-      ]
-    }
-  },
   "dependencies": {
     "compression": "^1.7.4",
-    "electron-squirrel-startup": "^1.0.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-basic-auth": "^1.2.0",
     "express-pouchdb": "^4.2.0",
-    "pouchdb": "^7.2.2"
+    "leveldown": "^5.6.0",
+    "pouchdb": "^7.2.2",
+    "pouchdb-adapter-leveldb": "^7.2.2",
+    "pouchdb-users": "^1.0.6"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.53",
-    "@electron-forge/maker-deb": "^6.0.0-beta.53",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.53",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.53",
-    "@electron-forge/maker-zip": "^6.0.0-beta.53",
     "@types/pouchdb": "^6.4.0",
-    "electron": "^10.1.2",
-    "electron-prebuilt": "^1.4.13"
+    "concurrently": "^6.2.1",
+    "nexe": "^4.0.0-beta.18",
+    "nodemon": "^2.0.12"
   }
 }
