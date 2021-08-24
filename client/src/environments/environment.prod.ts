@@ -1,8 +1,8 @@
 export const environment = {
   production: true,
-  baseUrl: '/villosum',
-  dbBaseUrl: '/villosum/db',
-  apiBaseUrl: '/villosum/api',
+  baseUrl: 'http://localhost:4200/',
+  apiBaseUrl: 'http://localhost/api/',
+  user: 'user',
   learningPhaseIntervalsInMinutes: [15, 24 * 60, 6 * 24 * 60],
   relearningPhaseIntervalsInMinutes: [20],
   graduatingIntervalInDays: 15,

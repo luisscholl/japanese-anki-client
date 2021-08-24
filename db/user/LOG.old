@@ -1,5 +1,5 @@
-2021/08/22-12:21:43.424 24f4 Recovering log #19
-2021/08/22-12:21:43.424 24f4 Level-0 table #21: started
-2021/08/22-12:21:43.430 24f4 Level-0 table #21: 237 bytes OK
-2021/08/22-12:21:43.434 24f4 Delete type=0 #19
-2021/08/22-12:21:43.434 24f4 Delete type=3 #17
+2021/08/22-17:22:02.174 acc Recovering log #28
+2021/08/22-17:22:02.174 acc Level-0 table #31: started
+2021/08/22-17:22:02.179 acc Level-0 table #31: 237 bytes OK
+2021/08/22-17:22:02.184 acc Delete type=0 #28
+2021/08/22-17:22:02.184 acc Delete type=3 #26

@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SettingsService } from './../../services/settings.service';
+import QrScanner from 'qr-scanner';
+const qrScannerWorkerSource = require('!!raw-loader!../../../../node_modules/qr-scanner/qr-scanner-worker.min.js');
+console.log(qrScannerWorkerSource.default);
+QrScanner.WORKER_PATH = URL.createObjectURL(new Blob([qrScannerWorkerSource.default]));
 
 @Component({
   selector: 'lj-settings',
@@ -8,11 +12,33 @@ import { SettingsService } from './../../services/settings.service';
 })
 export class SettingsComponent implements OnInit {
 
+  hasCamera = false;
+  showVideoApiBaseUrl = false;
+
+  @ViewChild('videoApiBaseUrl') videoApiBaseUrl: ElementRef<HTMLVideoElement>;
+
   constructor(
     public settings: SettingsService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    this.hasCamera = true;
+    this.settings.setApiBaseUrl(await QrScanner.hasCamera() + '');
+  }
+
+  apiBaseUrlChange(e: InputEvent) {
+    this.settings.setApiBaseUrl((e.target as HTMLInputElement).value);
+  }
+
+  initQRScannerApiBaseUrl() {
+    this.showVideoApiBaseUrl = true;
+    setTimeout(() => {
+      let qrScanner = new QrScanner(this.videoApiBaseUrl.nativeElement, result => {
+        this.settings.setApiBaseUrl(result);
+      });
+      qrScanner.start();
+      qrScanner.setCamera('environment');
+    });
   }
 
   userChange(e: InputEvent) {

@@ -1,4 +1,5 @@
 const path = require("path");
+const { networkInterfaces } = require("os");
 const express = require("express");
 const compression = require("compression");
 const cors = require("cors");
@@ -8,13 +9,13 @@ const PersistentPouchDB = PouchDB.defaults({
   adapter: "leveldb",
   prefix: "./db/",
 });
+const QRCode = require("qrcode");
 
 const _port = 80;
-const _client_folder = "/client/dist/client";
 
 const corsOptions = {
   origin: true,
-  credentials: true
+  credentials: true,
 };
 
 const api = express();
@@ -26,15 +27,21 @@ api.options("/api/", cors(corsOptions)); // enable pre-flight requests
 // Database
 api.use("/api/v1/db", require("express-pouchdb")(PersistentPouchDB));
 
-// Serve static files
-api.get("*.*", express.static(__dirname + _client_folder, { maxAge: "10y" }));
-
-// Serve client
-api.all("*", (req, res) => {
-  res.status(200).sendFile("/", { root: __dirname + _client_folder });
-});
-
 // Start up Express JS
 api.listen(_port, () => {
-  console.log("Listening on http://localhost:" + _port);
+  const nets = networkInterfaces();
+  for (const name of Object.keys(nets)) {
+    for (const net of nets[name]) {
+      if (!net.internal && net.family == "IPv4") {
+        QRCode.toString(net.address, { type: "terminal" }, (err, url) => {
+          console.log(
+            'Database hosted at ' + net.address + '\n' +
+            '\n' +
+            'Enter the address in the client settings.' +
+            '\n\n' +
+            url);
+        });
+      }
+    }
+  }
 });

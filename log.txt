@@ -794,3 +794,17 @@
 [Sun, 22 Aug 2021 10:21:56 GMT] [info] [<0.000.0>] ::ffff:127.0.0.1 - - GET /user/_local/TIKZ3bzMHTyxbBlnsjo5XQ%3D%3D? 304
 [Sun, 22 Aug 2021 10:21:56 GMT] [info] [<0.000.0>] ::ffff:127.0.0.1 - - GET /user/_changes?style=all_docs&since=45&limit=100 304
 [Sun, 22 Aug 2021 10:21:56 GMT] [info] [<0.000.0>] ::ffff:127.0.0.1 - - GET /user/_local/TIKZ3bzMHTyxbBlnsjo5XQ%3D%3D? 304
+[Sun, 22 Aug 2021 15:20:42 GMT] [info] [<0.000.0>] ::ffff:127.0.0.1 - - GET /user/ 200
+[Sun, 22 Aug 2021 15:20:42 GMT] [info] [<0.000.0>] ::ffff:127.0.0.1 - - GET / 304
+[Sun, 22 Aug 2021 15:20:42 GMT] [info] [<0.000.0>] ::ffff:127.0.0.1 - - GET /user/_local/TIKZ3bzMHTyxbBlnsjo5XQ%3D%3D? 304
+[Sun, 22 Aug 2021 15:20:42 GMT] [info] [<0.000.0>] ::ffff:127.0.0.1 - - GET /user/_changes?style=all_docs&since=45&limit=100 304
+[Sun, 22 Aug 2021 15:20:42 GMT] [info] [<0.000.0>] ::ffff:127.0.0.1 - - GET /user/_local/TIKZ3bzMHTyxbBlnsjo5XQ%3D%3D? 304
+[Sun, 22 Aug 2021 15:22:02 GMT] [info] [<0.000.0>] ::ffff:127.0.0.1 - - GET / 304
+[Sun, 22 Aug 2021 15:22:02 GMT] [info] [<0.000.0>] ::ffff:127.0.0.1 - - GET /user/_local/l_yJWdvckV68I5pCzeqUag%3D%3D? 304
+[Sun, 22 Aug 2021 15:22:02 GMT] [info] [<0.000.0>] ::ffff:127.0.0.1 - - GET /user/_local/l_yJWdvckV68I5pCzeqUag%3D%3D? 304
+[Sun, 22 Aug 2021 15:26:30 GMT] [info] [<0.000.0>] ::ffff:127.0.0.1 - - GET / 304
+[Sun, 22 Aug 2021 15:26:30 GMT] [info] [<0.000.0>] ::ffff:127.0.0.1 - - GET /user/_local/TIKZ3bzMHTyxbBlnsjo5XQ%3D%3D? 304
+[Sun, 22 Aug 2021 15:26:30 GMT] [info] [<0.000.0>] ::ffff:127.0.0.1 - - GET /user/_changes?style=all_docs&since=45&limit=100 304
+[Sun, 22 Aug 2021 15:26:30 GMT] [info] [<0.000.0>] ::ffff:127.0.0.1 - - GET /user/_local/TIKZ3bzMHTyxbBlnsjo5XQ%3D%3D? 304
+[Tue, 24 Aug 2021 17:16:47 GMT] [info] [<0.000.0>] ::ffff:192.168.178.42 - - GET / 200
+[Tue, 24 Aug 2021 17:18:22 GMT] [info] [<0.000.0>] ::ffff:192.168.178.84 - - GET / 200
