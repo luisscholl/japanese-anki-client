@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
-    "build": "npm run makeLineEndingsConsistent && npm run generateAttributions && ng build --prod --base-href /client/dist/client/",
+    "build": "npm run makeLineEndingsConsistent && npm run generateAttributions && ng build --prod --base-href /japanese-anki-client/client/dist/client/",
     "install": "npm run getJaSVGs",
     "test": "ng test",
     "lint": "ng lint",
