@@ -10,6 +10,8 @@ import { StatisticsService } from "./statistics.service";
 import { TagService } from "./tag.service";
 import { resolve } from "dns";
 const PouchDB = require('pouchdb').default;
+const pouchBulkDocs = PouchDB.prototype.bulkDocs;
+var that;
 import * as PouchDBFind from 'pouchdb-find';
 import { hexEncode } from '../utility';
 import './parcelShim';
@@ -90,7 +92,9 @@ export class NoteService {
     private tag: TagService,
     private keycloak: KeycloakService
   ) {
+    that = this;
     PouchDB.plugin((PouchDBFind as any).default);
+    PouchDB.plugin({ bulkDocs: this.sendBulkDocs });
     this.localDb = new PouchDB('villosum_db', { auto_compaction: true });
     this.peer = new Peer({
       host: 'localhost',
@@ -99,26 +103,25 @@ export class NoteService {
       secure: false,
       debug: 2,
       config: {
-        iceServers: [{ urls: 'stun:stun.l.google.com:19302'}]
+        iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
       }
     });
     this.peer.on('open', id => {
-      this.http.post(this.settings.getApiBaseUrl() + '/v1/peers', { id: id }).subscribe({ next: response => {
-        console.log('I am ' + id);
-        for (let peerId of (response as any).peers) {
-          if (peerId != this.peer.id) {
-            this.peerConnections[peerId] = this.peer.connect(peerId);
-            this.peerConnections[peerId].on('data', data => {
-              console.log(data);
-            });
+      this.http.post(this.settings.getApiBaseUrl() + '/v1/peers', { id: id }).subscribe({
+        next: response => {
+          console.log('I am ' + id);
+          for (let peerId of (response as any).peers) {
+            if (peerId != this.peer.id) {
+              this.peerConnections[peerId] = this.peer.connect(peerId);
+              this.peerConnections[peerId].on('data', this.handleDocsFromPeer);
+            }
           }
         }
-      }});
+      });
     });
     this.peer.on('connection', conn => {
-      console.log('Connection established, sending <Hello World!>...');
       this.peerConnections[conn.peer] = conn;
-      setTimeout(() => conn.send('Hello World!'), 1000);
+      conn.on('data', this.handleDocsFromPeer);
     });
     this.peer.on('error', err => {
       if (err.type === 'peer-unavailable') {
@@ -404,5 +407,26 @@ export class NoteService {
       ease: card.ease,
       reviews: card.reviews
     };
+  }
+
+  sendBulkDocs(docs, options, callback) {
+    if (options['villosumReceivedFromPeer']) {
+      delete options.villosumReceivedFromPeer;
+    } else {
+      // todo: Revisit whether it wouldn't be smarter to have peerConnections as an array
+      for (const [peerId, conn] of Object.entries(that.peerConnections)) {
+        (conn as any).send({
+          origin: peerId,
+          docs: docs,
+          options: options
+        });
+      }
+    }
+    return pouchBulkDocs.call(this, docs, options, callback);
+  }
+
+  handleDocsFromPeer(data: { origin: string, docs: any, options: any }) {
+    if (origin == this.peer.id) return;
+    that.localDb.bulkDocs(data.docs, Object.assign(data.options, { villosumReceivedFromPeer: true }), () => 'I am callback.');
   }
 }
