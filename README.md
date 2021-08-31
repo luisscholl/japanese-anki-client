@@ -24,6 +24,8 @@ Run `npm install`
 | user  | mugi       | password |
 | admin | heathcliff | password |
 
+todo: Export default Keycloak config and load during install
+
 ## Licenses
 
 This project is built upon various open source project (which include copyleft licenses). See https://github.com/luisscholl/japanese-anki-client/blob/master/linceses/COPYING.txt for more details about licenses concerning this project.
