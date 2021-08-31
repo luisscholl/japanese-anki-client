@@ -1,0 +1,13 @@
+{
+  "name": "auth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install": "docker run -d -p 8180:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -v keycloakVolume:/tmp --name keycloak quay.io/keycloak/keycloak",
+    "start": "docker start keycloak",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Luis Scholl",
+  "license": "UNLICENSED"
+}

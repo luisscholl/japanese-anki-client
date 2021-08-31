@@ -1,0 +1,7 @@
+{
+	"realm": "villosum-testing",
+	"bearer-only": "true",
+	"auth-server-url": "http://localhost:8180/auth",
+	"ssql-required": "external",
+	"resource": "backend-local"
+}
