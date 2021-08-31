@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host 0.0.0.0",
+    "start": "ng serve --host 0.0.0.0 --ssl",
     "build": "npm run makeLineEndingsConsistent && npm run generateAttributions && ng build --prod --base-href /japanese-anki-client/client/dist/client/",
+    "preinstall": "npx npm-force-resolutions",
     "install": "npm run getJaSVGs",
     "test": "ng test",
     "lint": "ng lint",
@@ -31,12 +32,13 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@ngx-pwa/local-storage": "^11.1.0",
     "bufferutil": "^4.0.3",
+    "keycloak-angular": "^8.3.0",
+    "keycloak-js": "^14.0.0",
     "object-sizeof": "^1.6.1",
     "peerjs": "^1.3.2",
     "pouch-replicate-webrtc": "^0.0.9",
     "pouchdb": "^7.2.2",
     "pouchdb-find": "^7.2.2",
-    "qr-scanner": "^1.3.0",
     "rxjs": "~6.6.7",
     "tslib": "^2.2.0",
     "zone.js": "~0.11.4"
@@ -60,7 +62,11 @@
     "karma-jasmine-html-reporter": "^1.5.4",
     "protractor": "~7.0.0",
     "raw-loader": "^4.0.2",
+    "source-map": "^0.6.1",
     "ts-node": "~9.1.1",
     "typescript": "~4.1.0"
+  },
+  "resolutions": {
+    "keycloak-js": "15.0.2"
   }
 }

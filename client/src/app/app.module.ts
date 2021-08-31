@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,7 +19,19 @@ import { HttpClientModule } from '@angular/common/http';
 import { ManageNoteComponent } from './components/manage-note/manage-note.component';
 import { NewCardComponent } from './components/new-card/new-card.component';
 import { ScratchpadComponent } from './components/scratchpad/scratchpad.component';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
+function initializeKeycloak(keycloak: KeycloakService) {
+  return () => 
+    keycloak.init({
+      config: environment.keycloak,
+      initOptions: {
+        onLoad: 'check-sso',
+        silentCheckSsoRedirectUri:
+          window.location.origin + '/assets/silent-check-sso.html'
+      }
+    });
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,9 +53,17 @@ import { ScratchpadComponent } from './components/scratchpad/scratchpad.componen
     HttpClientModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    FontAwesomeModule
+    FontAwesomeModule,
+    KeycloakAngularModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService]
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

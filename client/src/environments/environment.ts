@@ -4,9 +4,8 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:4200/',
-  apiBaseUrl: 'http://localhost/api/',
-  user: 'user',
+  baseUrl: 'http://localhost:4200',
+  apiBaseUrl: 'http://localhost:4201/api',
   learningPhaseIntervalsInMinutes: [15, 24 * 60, 6 * 24 * 60],
   relearningPhaseIntervalsInMinutes: [20],
   graduatingIntervalInDays: 15,
@@ -23,7 +22,12 @@ export const environment = {
   relearnPassedIntervalModifier: 0.7,
   minRelearnPassedIntervalInDays: 2,
   leechThreshold: 8,
-  reviewLookAheadInMinutes: 5
+  reviewLookAheadInMinutes: 5,
+  keycloak: {
+    url: 'http://localhost:8180/auth',
+    realm: 'villosum-testing',
+    clientId: 'pwa-local'
+  }
 };
 
 /*

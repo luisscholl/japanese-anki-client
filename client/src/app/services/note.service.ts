@@ -12,6 +12,9 @@ import { resolve } from "dns";
 const PouchDB = require('pouchdb').default;
 import * as PouchDBFind from 'pouchdb-find';
 import { hexEncode } from '../utility';
+import './parcelShim';
+import Peer from "peerjs";
+import { KeycloakService } from "keycloak-angular";
 
 @Injectable({
   providedIn: "root",
@@ -38,6 +41,9 @@ export class NoteService {
   cardTypes = ["native-japanese-writing", "japanese-native-recall"];
   remoteDb;
   localDb;
+  peer;
+  peerConnections = {};
+  sync;
   replicator;
   currentlyReviewed: {
     card: Card,
@@ -81,14 +87,55 @@ export class NoteService {
     private http: HttpClient,
     private settings: SettingsService,
     private statistics: StatisticsService,
-    private tag: TagService
+    private tag: TagService,
+    private keycloak: KeycloakService
   ) {
     PouchDB.plugin((PouchDBFind as any).default);
     this.localDb = new PouchDB('villosum_db', { auto_compaction: true });
-    if (this.settings.getUser()) {
-      this.remoteDb = new PouchDB(`${this.settings.getApiBaseUrl()}v1/db/${this.settings.getUser()}`);
-      this.localDb.sync(this.remoteDb, { live: true, retry: true }).on('error', console.error.bind(console));
-    }
+    this.peer = new Peer({
+      host: 'localhost',
+      port: 4201,
+      path: '/peerjs/myapp',
+      secure: false,
+      debug: 2,
+      config: {
+        iceServers: [{ urls: 'stun:stun.l.google.com:19302'}]
+      }
+    });
+    this.peer.on('open', id => {
+      this.http.post(this.settings.getApiBaseUrl() + '/v1/peers', { id: id }).subscribe({ next: response => {
+        console.log('I am ' + id);
+        for (let peerId of (response as any).peers) {
+          if (peerId != this.peer.id) {
+            this.peerConnections[peerId] = this.peer.connect(peerId);
+            this.peerConnections[peerId].on('data', data => {
+              console.log(data);
+            });
+          }
+        }
+      }});
+    });
+    this.peer.on('connection', conn => {
+      console.log('Connection established, sending <Hello World!>...');
+      this.peerConnections[conn.peer] = conn;
+      setTimeout(() => conn.send('Hello World!'), 1000);
+    });
+    this.peer.on('error', err => {
+      if (err.type === 'peer-unavailable') {
+        let peerId = err.message.substr('Could not connect to peer '.length);
+        delete this.peerConnections[peerId];
+        this.http.delete(this.settings.getApiBaseUrl() + '/v1/peers/' + peerId).subscribe();
+      } else {
+        console.error(err);
+      }
+    })
+    //this.settings.getDbChange().subscribe({
+    //  next: ([user, apiBaseUrl]) => {
+    //    if (this.sync) this.sync.cancel();
+    //    this.remoteDb = new PouchDB(`${apiBaseUrl}/v1/db/${user}`);
+    //    this.sync = this.localDb.sync(this.remoteDb, { live: true, retry: true }).on('error', console.error.bind(console));
+    //  }
+    //});
     this.localDb.createIndex({
       index: {
         fields: ['japanese', 'japanesePronunciation', 'native']

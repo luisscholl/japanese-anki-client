@@ -14,19 +14,15 @@ Styling is optimized for iPhone SE (2020) only.
 
 Prerequisites: curl, Swiss File Knife, Git, Node, npm, Docker
 
-Run ```./setup-development.sh``` to setup a development environment.
+Run `npm install`
 
-### Create a user
+### Default Users
 
-Create a user manually, e.g. for testing purposes:
-
-```bash
-curl -X PUT http://localhost:5984/_users/org.couchdb.user:<username> \
-  -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Basic YWRtaW46YWRtaW4=" \
-  -d '{"name": "<username>", "password": "<password>", "roles": [], "type": "user"}' 
-```
+| role  | username   | password |
+| ----- | ---------- | -------- |
+| user  | luis       | password |
+| user  | mugi       | password |
+| admin | heathcliff | password |
 
 ## Licenses
 

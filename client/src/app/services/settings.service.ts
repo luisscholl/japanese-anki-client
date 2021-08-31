@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { StorageMap } from "@ngx-pwa/local-storage";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, combineLatest, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 
@@ -10,7 +10,6 @@ import { environment } from "src/environments/environment";
   providedIn: "root",
 })
 export class SettingsService {
-  private user: BehaviorSubject<string>;
   private apiBaseUrl: BehaviorSubject<string>;
   private learningPhaseIntervalsInMillis: BehaviorSubject<number[]>;
   private learningPhaseIntervalsInMinutes: BehaviorSubject<number[]>;
@@ -33,7 +32,6 @@ export class SettingsService {
   private leechThreshold: BehaviorSubject<number>;
 
   constructor(private storage: StorageMap) {
-    this.user = new BehaviorSubject<string>(environment.user);
     this.apiBaseUrl = new BehaviorSubject<string>(environment.apiBaseUrl);
     this.learningPhaseIntervalsInMillis = new BehaviorSubject<number[]>(environment.learningPhaseIntervalsInMinutes.map(e => e * 60 * 1000));
     this.learningPhaseIntervalsInMinutes = new BehaviorSubject<number[]>(environment.learningPhaseIntervalsInMinutes);
@@ -54,12 +52,6 @@ export class SettingsService {
     this.minRelearnPassedIntervalInMillis = new BehaviorSubject<number>(environment.minRelearnPassedIntervalInDays * 24 * 60 * 60 * 1000);
     this.minRelearnPassedIntervalInDays = new BehaviorSubject<number>(environment.minRelearnPassedIntervalInDays);
     this.leechThreshold = new BehaviorSubject<number>(environment.leechThreshold);
-    this.storage.get("user", { type: "string" }).subscribe({
-      next: user => {
-        if (!user) return;
-        this.user.next(user);
-      }
-    });
     this.storage.get("apiBaseUrl", { type: "string" }).subscribe({
       next: apiBaseUrl => {
         if (!apiBaseUrl) return;
@@ -155,15 +147,6 @@ export class SettingsService {
         this.leechThreshold.next(leechThreshold);
       }
     });
-  }
-
-  getUser(): string {
-    return this.user.value;
-  }
-
-  setUser(user: string): void {
-    this.user.next(user);
-    this.storage.set("user", user, { type: "string" }).subscribe();
   }
 
   getApiBaseUrl(): string {

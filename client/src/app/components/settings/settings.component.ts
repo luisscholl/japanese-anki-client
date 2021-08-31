@@ -1,9 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SettingsService } from './../../services/settings.service';
-import QrScanner from 'qr-scanner';
-const qrScannerWorkerSource = require('!!raw-loader!../../../../node_modules/qr-scanner/qr-scanner-worker.min.js');
-console.log(qrScannerWorkerSource.default);
-QrScanner.WORKER_PATH = URL.createObjectURL(new Blob([qrScannerWorkerSource.default]));
+import { KeycloakProfile } from 'keycloak-js';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'lj-settings',
@@ -12,37 +10,29 @@ QrScanner.WORKER_PATH = URL.createObjectURL(new Blob([qrScannerWorkerSource.defa
 })
 export class SettingsComponent implements OnInit {
 
-  hasCamera = false;
-  showVideoApiBaseUrl = false;
-
-  @ViewChild('videoApiBaseUrl') videoApiBaseUrl: ElementRef<HTMLVideoElement>;
+  public loggedIn = false;
+  public userProfile: KeycloakProfile | null = null;
 
   constructor(
-    public settings: SettingsService
+    public settings: SettingsService,
+    private readonly keycloak: KeycloakService
   ) { }
 
   async ngOnInit() {
-    this.hasCamera = true;
-    this.settings.setApiBaseUrl(await QrScanner.hasCamera() + '');
+    this.loggedIn = await this.keycloak.isLoggedIn();
+
+    if (this.loggedIn) {
+      this.userProfile = await this.keycloak.loadUserProfile();
+    }
   }
 
-  apiBaseUrlChange(e: InputEvent) {
-    this.settings.setApiBaseUrl((e.target as HTMLInputElement).value);
+  login() {
+    console.log('Logging in.');
+    this.keycloak.login();
   }
 
-  initQRScannerApiBaseUrl() {
-    this.showVideoApiBaseUrl = true;
-    setTimeout(() => {
-      let qrScanner = new QrScanner(this.videoApiBaseUrl.nativeElement, result => {
-        this.settings.setApiBaseUrl(result);
-      });
-      qrScanner.start();
-      qrScanner.setCamera('environment');
-    });
-  }
-
-  userChange(e: InputEvent) {
-    this.settings.setUser((e.target as HTMLInputElement).value);
+  logout() {
+    this.keycloak.logout();
   }
 
   learningPhaseIntervalsInMinutesChange(e: InputEvent) {
