@@ -11,12 +11,18 @@ import { TagService } from "./tag.service";
 import { resolve } from "dns";
 const PouchDB = require('pouchdb').default;
 const pouchBulkDocs = PouchDB.prototype.bulkDocs;
+import * as process from 'process';
+window['process'] = process;
 var that;
 import * as PouchDBFind from 'pouchdb-find';
 import { hexEncode } from '../utility';
 import './parcelShim';
 import Peer from "peerjs";
 import { KeycloakService } from "keycloak-angular";
+const MemoryStream = require('memorystream');
+const replicationStream = require('pouchdb-replication-stream/dist/pouchdb.replication-stream.js');
+const Buffer = require('buffer/').Buffer;
+window['Buffer'] = Buffer;
 
 @Injectable({
   providedIn: "root",
@@ -84,6 +90,7 @@ export class NoteService {
       reviews: 1
     }];
   initialReviewCardStatus = this.initialLearnCardStatus;
+  sendBulkDocsToPeer = true;
 
   constructor(
     private http: HttpClient,
@@ -95,6 +102,8 @@ export class NoteService {
     that = this;
     PouchDB.plugin((PouchDBFind as any).default);
     PouchDB.plugin({ bulkDocs: this.sendBulkDocs });
+    PouchDB.plugin(replicationStream.plugin);
+    PouchDB.adapter('writableStream', replicationStream.adapters.writableStream);
     this.localDb = new PouchDB('villosum_db', { auto_compaction: true });
     this.peer = new Peer({
       host: 'localhost',
@@ -113,7 +122,8 @@ export class NoteService {
           for (let peerId of (response as any).peers) {
             if (peerId != this.peer.id) {
               this.peerConnections[peerId] = this.peer.connect(peerId);
-              this.peerConnections[peerId].on('data', this.handleDocsFromPeer);
+              this.peerConnections[peerId].on('data', this.handleDataFromPeer);
+              this.peerConnections[peerId].on('open', () => { this.sendReplicationDumpToRemote(this.peerConnections[peerId]); });
             }
           }
         }
@@ -121,7 +131,8 @@ export class NoteService {
     });
     this.peer.on('connection', conn => {
       this.peerConnections[conn.peer] = conn;
-      conn.on('data', this.handleDocsFromPeer);
+      conn.on('data', this.handleDataFromPeer);
+      conn.on('open', () => { this.sendReplicationDumpToRemote(conn); });
     });
     this.peer.on('error', err => {
       if (err.type === 'peer-unavailable') {
@@ -145,6 +156,21 @@ export class NoteService {
       }
     }).catch(err => {
       console.error(err);
+    });
+  }
+
+  sendReplicationDumpToRemote(conn: any) {
+    console.log('meow');
+    let dumpedString = '';
+    let stream = new MemoryStream();
+    stream.on('data', chunk => {
+      dumpedString += chunk.toString();
+    });
+    this.localDb.dump(stream).then(result => {
+      conn.send({
+        type: 'initialReplicationDump',
+        dump: dumpedString
+      });
     });
   }
 
@@ -410,23 +436,42 @@ export class NoteService {
   }
 
   sendBulkDocs(docs, options, callback) {
-    if (options['villosumReceivedFromPeer']) {
-      delete options.villosumReceivedFromPeer;
-    } else {
+    console.log('I am battoman.');
+    console.log(docs);
+    console.log(options);
+    console.log(callback);
+    if (that.sendBulkDocsToPeer) {
+      console.log('Sending bulk docs.');
       // todo: Revisit whether it wouldn't be smarter to have peerConnections as an array
       for (const [peerId, conn] of Object.entries(that.peerConnections)) {
         (conn as any).send({
+          type: 'bulkDocs',
           origin: peerId,
           docs: docs,
           options: options
         });
       }
     }
+    if (!callback) return pouchBulkDocs.call(this, docs, options);
     return pouchBulkDocs.call(this, docs, options, callback);
   }
 
-  handleDocsFromPeer(data: { origin: string, docs: any, options: any }) {
-    if (origin == this.peer.id) return;
-    that.localDb.bulkDocs(data.docs, Object.assign(data.options, { villosumReceivedFromPeer: true }), () => 'I am callback.');
+  // Might need some work as I currently don't understand, why handleDataFromPeer seems to be called with a { type: 'bulkDocs' } object with the data of the initial replication dump
+  // Maybe something between sendBulkDocs = false and sendBulkDocs = true is async? (Can't pass this trivially as an argument instead of global state as bulkDocs is called from replicate.to.)
+  handleDataFromPeer(data: { type: 'bulkDocs', origin: string, docs: any, options: any } | { type: 'initialReplicationDump', dump: string }) {
+    that.sendBulkDocsToPeer = false;
+    console.log('nyaaa');
+    console.log(data);
+    if (data.type === 'bulkDocs') {
+      if (origin == this.peer.id) return;
+      that.localDb.bulkDocs(data.docs, data.options, () => 'I am callback.');
+    } else if (data.type === 'initialReplicationDump') {
+      let stream = new MemoryStream([data.dump]);
+      let remoteDb = new PouchDB('remoteDb');
+      remoteDb.load(stream);
+      remoteDb.replicate.to(that.localDb);
+    }
+    console.log('aaayn');
+    that.sendBulkDocsToPeer = true;
   }
 }
