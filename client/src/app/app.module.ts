@@ -19,6 +19,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ManageNoteComponent } from './components/manage-note/manage-note.component';
 import { NewCardComponent } from './components/new-card/new-card.component';
 import { ScratchpadComponent } from './components/scratchpad/scratchpad.component';
+import { OAuthModule } from 'angular-oauth2-oidc';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,13 @@ import { ScratchpadComponent } from './components/scratchpad/scratchpad.componen
     HttpClientModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    FontAwesomeModule
+    FontAwesomeModule,
+    OAuthModule.forRoot({
+      resourceServer: {
+        allowedUrls: [ environment.apiBaseUrl ],
+        sendAccessToken: true
+      }
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

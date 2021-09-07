@@ -23,10 +23,12 @@ export const environment = {
   minRelearnPassedIntervalInDays: 2,
   leechThreshold: 8,
   reviewLookAheadInMinutes: 5,
-  keycloak: {
-    url: 'http://localhost:8180/auth',
-    realm: 'villosum-testing',
-    clientId: 'pwa-local'
+  auth: {
+    issuer: 'http://localhost:8180/auth/realms/villosum-testing',
+    redirectUri: 'https://localhost:4200',
+    clientId: 'pwa-local',
+    responseType: 'code',
+    scope: 'openid profile email offline_access'
   }
 };
 

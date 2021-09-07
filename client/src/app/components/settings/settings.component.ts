@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { OAuthService } from 'angular-oauth2-oidc';
 import { SettingsService } from './../../services/settings.service';
 
 @Component({
@@ -12,7 +13,8 @@ export class SettingsComponent implements OnInit {
   public userProfile: { username: string } | null = null;
 
   constructor(
-    public settings: SettingsService
+    public settings: SettingsService,
+    private oauthService: OAuthService
   ) { }
 
   async ngOnInit() {
@@ -25,6 +27,7 @@ export class SettingsComponent implements OnInit {
 
   login() {
     console.log('Logging in.');
+    this.oauthService.initCodeFlow();
   }
 
   logout() {
