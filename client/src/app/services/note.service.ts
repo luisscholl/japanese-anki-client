@@ -18,7 +18,6 @@ import * as PouchDBFind from 'pouchdb-find';
 import { hexEncode } from '../utility';
 import './parcelShim';
 import Peer from "peerjs";
-import { KeycloakService } from "keycloak-angular";
 const MemoryStream = require('memorystream');
 const replicationStream = require('pouchdb-replication-stream/dist/pouchdb.replication-stream.js');
 const Buffer = require('buffer/').Buffer;
@@ -96,8 +95,7 @@ export class NoteService {
     private http: HttpClient,
     private settings: SettingsService,
     private statistics: StatisticsService,
-    private tag: TagService,
-    private keycloak: KeycloakService
+    private tag: TagService
   ) {
     that = this;
     PouchDB.plugin((PouchDBFind as any).default);

@@ -1,7 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SettingsService } from './../../services/settings.service';
-import { KeycloakProfile } from 'keycloak-js';
-import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'lj-settings',
@@ -11,28 +9,25 @@ import { KeycloakService } from 'keycloak-angular';
 export class SettingsComponent implements OnInit {
 
   public loggedIn = false;
-  public userProfile: KeycloakProfile | null = null;
+  public userProfile: { username: string } | null = null;
 
   constructor(
-    public settings: SettingsService,
-    private readonly keycloak: KeycloakService
+    public settings: SettingsService
   ) { }
 
   async ngOnInit() {
-    this.loggedIn = await this.keycloak.isLoggedIn();
+    this.loggedIn = false;
 
     if (this.loggedIn) {
-      this.userProfile = await this.keycloak.loadUserProfile();
+      this.userProfile = null;
     }
   }
 
   login() {
     console.log('Logging in.');
-    this.keycloak.login();
   }
 
   logout() {
-    this.keycloak.logout();
   }
 
   learningPhaseIntervalsInMinutesChange(e: InputEvent) {
