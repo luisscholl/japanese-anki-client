@@ -104,9 +104,10 @@ export class NoteService {
     PouchDB.adapter('writableStream', replicationStream.adapters.writableStream);
     this.localDb = new PouchDB('villosum_db', { auto_compaction: true });
     let backend: string[] = environment.apiBaseUrl.split(':');
+    console.log(backend[0]);
     this.peer = new Peer({
       host: backend[1].substr(2),
-      port: parseInt(backend[2]) || backend[0] === 'https' ? 443 : 80,
+      port: parseInt(backend[2]) || (backend[0] === 'https' ? 443 : 80),
       path: '/v1/peerjs/myapp',
       secure: backend[0] === 'https',
       debug: 2,

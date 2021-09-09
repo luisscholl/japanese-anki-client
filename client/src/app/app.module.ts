@@ -19,7 +19,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { ManageNoteComponent } from './components/manage-note/manage-note.component';
 import { NewCardComponent } from './components/new-card/new-card.component';
 import { ScratchpadComponent } from './components/scratchpad/scratchpad.component';
-import { OAuthModule } from 'angular-oauth2-oidc';
+import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
+
+export function authStorageFactory(): OAuthStorage {
+  return localStorage;
+}
 
 @NgModule({
   declarations: [
@@ -50,7 +54,9 @@ import { OAuthModule } from 'angular-oauth2-oidc';
       }
     })
   ],
-  providers: [],
+  providers: [
+    { provide: OAuthStorage, useFactory: authStorageFactory }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

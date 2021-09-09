@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   baseUrl: 'http://localhost:4200',
-  apiBaseUrl: 'http://localhost:4201/api',
+  apiBaseUrl: 'http://localhost:4201',
   learningPhaseIntervalsInMinutes: [15, 24 * 60, 6 * 24 * 60],
   relearningPhaseIntervalsInMinutes: [20],
   graduatingIntervalInDays: 15,
@@ -25,7 +25,7 @@ export const environment = {
   reviewLookAheadInMinutes: 5,
   auth: {
     issuer: 'http://localhost:8180/auth/realms/villosum-testing',
-    redirectUri: 'https://localhost:4200',
+    redirectUri: 'https://localhost:4200/settings',
     clientId: 'pwa-local',
     responseType: 'code',
     scope: 'openid profile email offline_access'

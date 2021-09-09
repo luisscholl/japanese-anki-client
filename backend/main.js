@@ -76,8 +76,7 @@ if (environment.auth.provider === "keycloak") {
         console.error(err);
         return res.sendStatus(401);
       }
-      res.locals.user = response;
-      console.log(res.locals.user);
+      res.locals.user = response.sub;
       next();
     });
   });

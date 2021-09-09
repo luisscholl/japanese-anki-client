@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
+import { Subscription } from 'rxjs';
 import { SettingsService } from './../../services/settings.service';
 
 @Component({
@@ -9,8 +10,10 @@ import { SettingsService } from './../../services/settings.service';
 })
 export class SettingsComponent implements OnInit {
 
-  public loggedIn = false;
-  public userProfile: { username: string } | null = null;
+  public userProfile: any | null = null;
+  subscription: Subscription;
+  tokenReceived = false;
+  discoveryDocumentLoaded = false;
 
   constructor(
     public settings: SettingsService,
@@ -18,19 +21,41 @@ export class SettingsComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.loggedIn = false;
-
-    if (this.loggedIn) {
-      this.userProfile = null;
+    this.tokenReceived = this.oauthService.hasValidAccessToken();
+    this.discoveryDocumentLoaded = this.oauthService.discoveryDocumentLoaded;
+    if (this.tokenReceived && this.discoveryDocumentLoaded) {
+      this.loadUserProfile();
+    } else {
+      this.subscription = this.oauthService.events.subscribe(async event => {
+        switch (event.type) {
+          case 'token_received':
+            this.tokenReceived = true;
+            if (this.discoveryDocumentLoaded) this.loadUserProfile();
+            break;
+          case 'discovery_document_loaded':
+            this.discoveryDocumentLoaded = true;
+            if (this.tokenReceived) this.loadUserProfile();
+            break;
+        }
+      });
     }
   }
 
+  async loadUserProfile() {
+    let userProfile: any = await this.oauthService.loadUserProfile();
+    this.userProfile = {};
+    // todo: Check whether Amazon Cognito does indeed return the username at userProfile.info.username
+    // Keylcoak uses preferred_username while Amazaon Cognito uses username.
+    this.userProfile.username = userProfile.info?.preferred_username || userProfile.info?.username;
+    if (this.subscription) this.subscription.unsubscribe();
+  }
+
   login() {
-    console.log('Logging in.');
     this.oauthService.initCodeFlow();
   }
 
   logout() {
+    this.oauthService.logOut();
   }
 
   learningPhaseIntervalsInMinutesChange(e: InputEvent) {

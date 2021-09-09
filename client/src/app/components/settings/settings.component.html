@@ -1,8 +1,8 @@
 <div class="settings">
   <h3>Sync</h3>
-  <button *ngIf="!loggedIn" (click)="login()">Login</button>
+  <button *ngIf="!userProfile" (click)="login()">Login</button>
   <p *ngIf="userProfile?.username">Logged in as {{ userProfile.username }}</p>
-  <button *ngIf="loggedIn" (click)="logout()">Logout</button>
+  <button *ngIf="userProfile" (click)="logout()">Logout</button>
   <h3>Learning Phase Intervals In Minutes</h3>
   <input
     type="text"
