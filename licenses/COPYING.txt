@@ -3,9 +3,9 @@ See <https://github.com/luisscholl/japanese-anki-client> for more details about 
 
 JapaneseAnkiClient builds upon various open source projects. Most of them are included in JapaneseAnkiClient using npm. A list of the projects included via npm and their respective licenses can be found in licenses/npm-licenses.txt . All files of these projects are subject to their respective license.
 
-All of the files within the AnimCJK submodule are subject to AnimCJK's license.
+Keycloak is licensed under the Apache License (see auth-license.txt or <Auth for local testing> section, if viewing from the web app.)
 
-Apache CouchDB is subject to Apache CouchDB's license.
+All of the files within the AnimCJK submodule are subject to AnimCJK's license.
 
 Other files of the JapaneseAnkiClient project are licensed under the terms of the GNU
 Lesser General Public License as published by the Free Software Foundation,

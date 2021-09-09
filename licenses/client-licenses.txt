@@ -8880,7 +8880,7 @@ THE SOFTWARE.
 ******************************
 
 yargs-parser
-20.2.7 <https://github.com/yargs/yargs-parser>
+20.2.9 <https://github.com/yargs/yargs-parser>
 Copyright (c) 2016, Contributors
 
 Permission to use, copy, modify, and/or distribute this software
