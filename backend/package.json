@@ -8,8 +8,9 @@
     "postinstall": "npm i -g pm2",
     "start": "node -e \"const fs = require('fs'); fs.copyFileSync('./local.environment.json', './environment.json');\" && nodemon main.js",
     "prodEnvTest": "node -e \"const fs = require('fs'); fs.copyFileSync('./prod.environment.json', './environment.json');\" && nodemon main.js",
-    "prod": "node -e \"const fs = require('fs'); fs.copyFileSync('./prod.environment.json', './environment.json');\" && pm2 restart main.js",
-    "lint": "echo \"No linting configured\""
+    "prod": "node -e \"const fs = require('fs'); fs.copyFileSync('./prod.environment.json', './environment.json');\" && pm2 restart main",
+    "lint": "echo \"No linting configured\"",
+    "deploy": "ssh schatten \"mkdir tmp\" && scp -r * schatten:~/tmp && ssh schatten \"rsync -av --delete tmp/ villosum-backend && cd villosum-backend && mv prod.environment.json environment.json && pm2 restart villosum-backend && cd .. && rm -r tmp\""
   },
   "keywords": [],
   "author": {

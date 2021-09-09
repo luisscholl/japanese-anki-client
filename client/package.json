@@ -4,7 +4,6 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --ssl",
-    "startProd": "ng serve --host 0.0.0.0 --ssl --configuration=production",
     "build": "npm run makeLineEndingsConsistent && npm run generateAttributions && ng build --configuration=production --base-href /",
     "postinstall": "npm run getJaSVGs",
     "test": "ng test",
@@ -15,7 +14,8 @@
     "generateBackendAttributions": "cd ../backend && generate-attribution && move-file oss-attribution/attribution.txt ../licenses/backend-licenses.txt && rimraf oss-attribution && cd ../client",
     "generateGenericAttributions": "cd .. && generate-attribution && move-file oss-attribution/attribution.txt licenses/generic-licenses.txt && rimraf oss-attribution && cd client",
     "getJaSVGs": "copyfiles -f \"../animCJK/svgsJa/*\" src/assets/jaSVGs && copyfiles -f \"../animCJK/svgsJaSpecial/*\" src/assets/jaSVGs && copyfiles -f \"../animCJK/svgsKana/*\" src/assets/jaSVGs",
-    "makeLineEndingsConsistent": "sfk remcr -dir . -yes"
+    "makeLineEndingsConsistent": "sfk remcr -dir . -yes",
+    "deploy": "npm run build && scp -r dist/client licht:~ && ssh licht \"sudo rsync -av --delete client/ /var/www/html/villosum\" && ssh licht \"rm -r client/\""
   },
   "private": true,
   "dependencies": {

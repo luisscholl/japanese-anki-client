@@ -62,15 +62,14 @@ peerServer.on("connection", (client) => {});
 api.use("/v1/peerjs", peerServer);
 
 if (environment.auth.provider === "keycloak") {
-  api.use("/v1/peers", keycloak.protect("user"), (req, res, next) => {
+  api.use("/", keycloak.protect("user"), (req, res, next) => {
     res.locals.user = req.kauth.grant.access_token.content.sub;
     next();
   });
 } else if (environment.auth.provider === "cognito") {
-  api.use("/v1/peers", (req, res, next) => {
+  api.use("/", (req, res, next) => {
     // substr(7) removes 'Bearer '
-    let accessToken = req.headers.authorization.substr(7);
-    console.log(accessToken);
+    let accessToken = req.headers.authorization && req.headers.authorization.substr(7);
     if (!accessToken) return res.sendStatus(401);
     cognitoExpress.validate(accessToken, (err, response) => {
       if (err) {
