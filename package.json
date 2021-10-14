@@ -4,7 +4,7 @@
   "description": "This is an application for learning Japanese vocabulary.",
   "main": "index.js",
   "scripts": {
-    "install": "git submodule update --init --recursive && npm i -g @angular/cli && cd client && npm install && cd .. && cd backend && npm i && cd ..",
+    "install": "git submodule update --init --recursive && npm i -g @angular/cli && cd client && npm install && cd .. && cd backend && npm i && cd .. && cd auth && npm i && cd ..",
     "start": "concurrently -n Frontend,Backend,Auth \"cd client && npm start\" \"cd backend && npm start\" \"cd auth && npm start\"",
     "deploy": "cd client && npm run deploy && cd ../backend && npm run deploy && cd ..",
     "test": "echo \"Error: no test specified\" && exit 1"

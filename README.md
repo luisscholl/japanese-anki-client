@@ -12,7 +12,7 @@ Styling is optimized for iPhone SE (2020) only.
 
 ### Installation
 
-Prerequisites: curl, Swiss File Knife, Git, Node, npm, Docker
+Prerequisites: curl, Swiss File Knife, Git, Node 14+, npm, Docker
 
 Run `npm install`
 
